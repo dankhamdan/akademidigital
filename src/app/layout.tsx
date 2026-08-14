@@ -14,23 +14,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AkademiDigital — Template Website + Google Sheets Backend",
+  title: "AkademiDigital — Aplikasi Web Siap Pakai + Google Sheets",
   description:
-    "Jual template website profesional dengan Google Apps Script backend. Source code lengkap + panduan deploy. Deploy gratis di Vercel.",
+    "Jual aplikasi web berbasis Google Apps Script: Aplikasi Zakat, Tabungan Sekolah, Sikurban & Kas Masjid. Source code lengkap + panduan deploy. Hosting gratis.",
   keywords: [
-    "template website",
-    "google sheets backend",
+    "aplikasi zakat",
+    "aplikasi tabungan sekolah",
+    "aplikasi sikurban",
+    "aplikasi kas masjid",
     "google apps script",
-    "next.js template",
-    "website tanpa server",
-    "landing page template",
-    "source code website",
+    "google sheets backend",
+    "source code aplikasi",
+    "aplikasi web gratis",
   ],
   icons: { icon: "/logo.svg" },
   openGraph: {
-    title: "Template Website + Google Sheets Backend — AkademiDigital",
+    title: "Aplikasi Web Siap Pakai + Google Sheets — AkademiDigital",
     description:
-      "Dapatkan source code website + panduan deploy. Hosting gratis di Vercel, data di Google Sheets. Bayar sekali, pakai selamanya.",
+      "4 aplikasi web berbasis GAS: Zakat, Tabungan Sekolah, Sikurban & Kas Masjid. Source code + panduan deploy. Bayar sekali, pakai selamanya.",
     url: "https://akademidigital.vercel.app",
     siteName: "AkademiDigital",
     type: "website",

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight,
@@ -18,11 +18,12 @@ import {
   Heart,
   Users,
   BarChart3,
+  Wallet,
   Download,
   ExternalLink,
   Code2,
-  ClipboardList,
-  Receipt,
+  Play,
+  Clock,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -33,7 +34,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import {
   Accordion,
   AccordionContent,
@@ -65,13 +65,14 @@ const products = [
     name: 'Aplikasi Zakat',
     tagline: 'Sistem pengelolaan zakat digital untuk masjid & lembaga',
     icon: Calculator,
-    color: 'emerald',
-    gradient: 'from-emerald-500 to-teal-500',
+    gradient: 'from-emerald-600 to-teal-600',
     lightBg: 'bg-emerald-50',
-    lightBorder: 'border-emerald-100',
+    lightBorder: 'border-emerald-200',
     textColor: 'text-emerald-600',
     badgeBg: 'bg-emerald-100',
     price: '249K',
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    duration: '3:45',
     features: [
       'Kalkulasi zakat fitrah & mal otomatis',
       'Input data mustahik (penerima zakat)',
@@ -82,58 +83,46 @@ const products = [
       'Multi-admin (takmir masjid)',
       'QR Code untuk pembayaran digital',
     ],
-    preview: [
-      { label: 'Dashboard', icon: BarChart3 },
-      { label: 'Kalkulator', icon: Calculator },
-      { label: 'Data Mustahik', icon: Users },
-      { label: 'Laporan', icon: Receipt },
-    ],
     desc: 'Kelola zakat masjid atau lembaga Anda secara digital. Semua data tersimpan rapi di Google Sheets — bisa diakses kapan saja, di mana saja. Cocok untuk masjid, musholla, LAZ, dan lembaga zakat.',
-    stack: ['Next.js', 'Tailwind CSS', 'Google Apps Script', 'Google Sheets', 'Vercel'],
   },
   {
-    id: 'taunan',
-    name: 'Aplikasi Taunan Sekolah',
-    tagline: 'Laporan tahunan digital & buku tahunan sekolah otomatis',
-    icon: BookOpen,
-    color: 'blue',
-    gradient: 'from-blue-500 to-indigo-500',
-    lightBg: 'bg-blue-50',
-    lightBorder: 'border-blue-100',
-    textColor: 'text-blue-600',
-    badgeBg: 'bg-blue-100',
+    id: 'tabungan',
+    name: 'Aplikasi Tabungan Sekolah',
+    tagline: 'Sistem tabungan digital siswa — nabung mudah, transparan',
+    icon: Wallet,
+    gradient: 'from-violet-600 to-purple-600',
+    lightBg: 'bg-violet-50',
+    lightBorder: 'border-violet-200',
+    textColor: 'text-violet-600',
+    badgeBg: 'bg-violet-100',
     price: '299K',
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    duration: '4:12',
     features: [
-      'Input data siswa, guru, & staf',
-      'Generate laporan tahunan otomatis',
-      'Statistik akademik & non-akademik',
-      'Galeri foto kegiatan sekolah',
-      'Template buku tahunan (yearbook)',
-      'Cetak PDF laporan tahunan',
-      'Dashboard kepala sekolah',
-      'Multi-user (guru & admin)',
+      'Setoran & penarikan tabungan siswa',
+      'Buku tabungan digital otomatis',
+      'Laporan per kelas / per siswa',
+      'Notifikasi ke orang tua via WhatsApp',
+      'Dashboard bendahara sekolah',
+      'Import data siswa dari Google Sheets',
+      'Cetak slip tabungan',
+      'Multi-admin (bendahara & wali kelas)',
     ],
-    preview: [
-      { label: 'Dashboard', icon: BarChart3 },
-      { label: 'Data Siswa', icon: Users },
-      { label: 'Laporan', icon: ClipboardList },
-      { label: 'Yearbook', icon: BookOpen },
-    ],
-    desc: 'Buat laporan tahunan sekolah dan buku tahunan digital secara otomatis. Data siswa, prestasi, dan kegiatan tercatat di Google Sheets. Cetak PDF atau bagikan link digital ke orang tua.',
-    stack: ['Next.js', 'Tailwind CSS', 'Google Apps Script', 'Google Sheets', 'Vercel'],
+    desc: 'Manajemen tabungan siswa jadi lebih mudah dan transparan. Orang tua bisa memantau saldo tabungan anak secara real-time. Semua data tersinkron ke Google Sheets.',
   },
   {
     id: 'sikurban',
     name: 'Aplikasi Sikurban',
     tagline: 'Sistem kurban digital — pendaftaran, pembayaran & distribusi',
     icon: Heart,
-    color: 'amber',
-    gradient: 'from-amber-500 to-orange-500',
+    gradient: 'from-amber-600 to-orange-600',
     lightBg: 'bg-amber-50',
-    lightBorder: 'border-amber-100',
+    lightBorder: 'border-amber-200',
     textColor: 'text-amber-600',
     badgeBg: 'bg-amber-100',
     price: '199K',
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    duration: '3:20',
     features: [
       'Form pendaftaran kurban online',
       'Pencatatan jenis hewan kurban',
@@ -144,14 +133,32 @@ const products = [
       'QR Code validasi penerima',
       'WhatsApp notification otomatis',
     ],
-    preview: [
-      { label: 'Dashboard', icon: BarChart3 },
-      { label: 'Pendaftaran', icon: ClipboardList },
-      { label: 'Pembayaran', icon: Receipt },
-      { label: 'Distribusi', icon: Users },
-    ],
     desc: 'Panitia kurban masjid atau lembaga bisa mengelola pendaftaran, pembayaran iuran, dan distribusi daging kurban secara digital. Semua data tersinkron ke Google Sheets secara real-time.',
-    stack: ['Next.js', 'Tailwind CSS', 'Google Apps Script', 'Google Sheets', 'Vercel'],
+  },
+  {
+    id: 'kas-masjid',
+    name: 'Aplikasi Kas Masjid',
+    tagline: 'Kelola keuangan masjid — pemasukan, pengeluaran & laporan',
+    icon: BarChart3,
+    gradient: 'from-rose-600 to-pink-600',
+    lightBg: 'bg-rose-50',
+    lightBorder: 'border-rose-200',
+    textColor: 'text-rose-600',
+    badgeBg: 'bg-rose-100',
+    price: '249K',
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    duration: '3:58',
+    features: [
+      'Pencatatan pemasukan & pengeluaran',
+      'Kategori transaksi otomatis',
+      'Laporan bulanan & tahunan',
+      'Dashboard grafik keuangan',
+      'Multi-admin (takmir & bendahara)',
+      'Export laporan ke PDF',
+      'Notifikasi saldo rendah',
+      'Rekap donasi per jamaah',
+    ],
+    desc: 'Sistem keuangan masjid yang lengkap dan transparan. Catat setiap pemasukan dan pengeluaran, lalu lihat laporannya dalam bentuk grafik yang mudah dipahami. Semua data di Google Sheets.',
   },
 ]
 
@@ -164,11 +171,92 @@ const faqList = [
   { q: 'Support sampai kapan?', a: 'Kami berikan support via WhatsApp selama 6 bulan untuk pertanyaan seputar deploy dan penggunaan aplikasi.' },
 ]
 
-// ─── Component ────────────────────────────────────────────────
+// ─── Video Card Component ────────────────────────────────────
+function VideoCard({ product, onPlay }: { product: typeof products[0]; onPlay: (p: typeof products[0]) => void }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <motion.div variants={fadeUp} custom={products.indexOf(product)}>
+      <Card
+        className="group relative flex flex-col rounded-2xl border-2 border-gray-100 hover:shadow-xl transition-all duration-300 h-full overflow-hidden"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* Video Thumbnail Area */}
+        <div className="relative aspect-video w-full overflow-hidden cursor-pointer" onClick={() => onPlay(product)}>
+          {/* Gradient background simulating video thumbnail */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${product.gradient} opacity-90`} />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,255,255,0.15),transparent_60%)]" />
+
+          {/* App icon & name overlay */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white">
+            <motion.div
+              animate={{ scale: hovered ? 1.1 : 1 }}
+              transition={{ duration: 0.3 }}
+              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30"
+            >
+              <product.icon className="h-8 w-8" />
+            </motion.div>
+            <p className="text-sm font-semibold text-white/90">{product.name}</p>
+          </div>
+
+          {/* Play button */}
+          <motion.div
+            animate={{ scale: hovered ? 1.15 : 1, opacity: hovered ? 1 : 0.85 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur-sm">
+              <Play className="h-7 w-7 text-gray-800 ml-1" fill="currentColor" />
+            </div>
+          </motion.div>
+
+          {/* Duration badge */}
+          <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+            <Clock className="h-3 w-3" />
+            {product.duration}
+          </div>
+
+          {/* Top price badge */}
+          <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2.5 py-1 text-xs font-bold text-gray-800 backdrop-blur-sm shadow-sm">
+            Rp {product.price}
+          </div>
+        </div>
+
+        <CardHeader className="pb-2 pt-4 px-5">
+          <CardTitle className="text-lg font-bold">{product.name}</CardTitle>
+          <p className="text-sm text-gray-400 mt-0.5">{product.tagline}</p>
+        </CardHeader>
+
+        <CardContent className="flex-1 px-5 pb-5">
+          <ul className="space-y-2 mb-4">
+            {product.features.slice(0, 4).map((f) => (
+              <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
+                <Check className={`mt-0.5 h-4 w-4 shrink-0 ${product.textColor}`} />
+                {f}
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-gray-400 mb-4">+{product.features.length - 4} fitur lainnya</p>
+
+          <Button
+            className={`w-full rounded-full py-5 font-semibold bg-gradient-to-r ${product.gradient} text-white shadow-sm group-hover:shadow-md transition-shadow gap-2`}
+            onClick={() => onPlay(product)}
+          >
+            Lihat Demo <Play className="h-4 w-4 ml-1" fill="currentColor" />
+          </Button>
+        </CardContent>
+      </Card>
+    </motion.div>
+  )
+}
+
+// ─── Main Component ──────────────────────────────────────────
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null)
+  const [activeProduct, setActiveProduct] = useState<typeof products[0] | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const videoRef = useRef<HTMLIFrameElement>(null)
 
   const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -246,7 +334,7 @@ export default function Home() {
       {/* ─── Hero ───────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-gray-100">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-emerald-50/40" />
-        <div className="relative mx-auto max-w-6xl px-5 py-16 md:py-24 text-center">
+        <div className="relative mx-auto max-w-6xl px-5 py-14 md:py-20 text-center">
           <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.08 } } }}>
             <motion.div variants={fadeUp} custom={0}>
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
@@ -278,13 +366,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── Products ───────────────────────────────── */}
-      <section id="produk" className="py-16 md:py-20">
+      {/* ─── Products (Video Showcase) ───────────────── */}
+      <section id="produk" className="py-14 md:py-20">
         <div className="mx-auto max-w-6xl px-5">
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <p className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Produk Kami</p>
-            <h2 className="mt-2 text-2xl font-bold md:text-3xl">3 Aplikasi Siap Pakai</h2>
-            <p className="mt-2 text-gray-500">Pilih yang sesuai kebutuhan Anda — atau beli semua dengan harga spesial</p>
+            <h2 className="mt-2 text-2xl font-bold md:text-3xl">4 Aplikasi Siap Pakai</h2>
+            <p className="mt-2 text-gray-500">Tonton demo video, pilih yang sesuai kebutuhan Anda</p>
           </div>
 
           <motion.div
@@ -292,160 +380,90 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, margin: '-40px' }}
             variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
-            className="grid gap-6 lg:grid-cols-3"
+            className="grid gap-6 md:grid-cols-2"
           >
-            {products.map((product, idx) => (
-              <motion.div key={product.id} variants={fadeUp} custom={idx}>
-                <Card className={`group relative flex flex-col rounded-2xl border-2 hover:shadow-xl transition-all duration-300 h-full cursor-pointer ${product.lightBorder}`}
-                  onClick={() => setSelectedProduct(product)}
-                >
-                  {/* Color top bar */}
-                  <div className={`h-1.5 rounded-t-2xl bg-gradient-to-r ${product.gradient}`} />
-                  
-                  <CardHeader className="pb-3 pt-5">
-                    <div className="flex items-start justify-between">
-                      <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${product.badgeBg} ${product.textColor}`}>
-                        <product.icon className="h-6 w-6" />
-                      </div>
-                      <span className="text-2xl font-extrabold text-gray-900">Rp {product.price}</span>
-                    </div>
-                    <CardTitle className="mt-3 text-xl font-bold">{product.name}</CardTitle>
-                    <p className="mt-1 text-sm text-gray-400">{product.tagline}</p>
-                  </CardHeader>
-
-                  <CardContent className="flex-1">
-                    {/* Preview grid */}
-                    <div className={`grid grid-cols-2 gap-2 mb-5`}>
-                      {product.preview.map((p) => (
-                        <div key={p.label} className={`flex flex-col items-center justify-center gap-1.5 rounded-lg ${product.lightBg} border ${product.lightBorder} p-3`}>
-                          <p.icon className={`h-5 w-5 ${product.textColor}`} />
-                          <span className="text-[10px] font-medium text-gray-500">{p.label}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Top features */}
-                    <ul className="space-y-2">
-                      {product.features.slice(0, 4).map((f) => (
-                        <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
-                          <Check className={`mt-0.5 h-4 w-4 shrink-0 ${product.textColor}`} />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="mt-3 text-xs text-gray-400">+{product.features.length - 4} fitur lainnya</p>
-                  </CardContent>
-
-                  <div className="px-6 pb-5">
-                    <Button className={`w-full rounded-full py-5 font-semibold bg-gradient-to-r ${product.gradient} text-white shadow-sm group-hover:shadow-md transition-shadow gap-2`}>
-                      Lihat Detail <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </Card>
-              </motion.div>
+            {products.map((product) => (
+              <VideoCard key={product.id} product={product} onPlay={setActiveProduct} />
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* ─── Product Detail Modal ──────────────────────── */}
+      {/* ─── Video Modal ──────────────────────────────── */}
       <AnimatePresence>
-        {selectedProduct && (
+        {activeProduct && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/50 backdrop-blur-sm p-4 pt-10 pb-20"
-            onClick={() => setSelectedProduct(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            onClick={() => setActiveProduct(null)}
           >
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-2xl rounded-2xl bg-white shadow-2xl"
+              className="relative w-full max-w-3xl rounded-2xl overflow-hidden bg-white shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close */}
-              <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition">
+              {/* Close button */}
+              <button
+                onClick={() => setActiveProduct(null)}
+                className="absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 transition backdrop-blur-sm"
+              >
                 <X className="h-4 w-4" />
               </button>
 
-              {/* Header */}
-              <div className={`rounded-t-2xl bg-gradient-to-r ${selectedProduct.gradient} p-8 text-white`}>
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
-                    <selectedProduct.icon className="h-7 w-7" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold">{selectedProduct.name}</h3>
-                    <p className="mt-0.5 text-sm text-white/80">{selectedProduct.tagline}</p>
-                  </div>
-                </div>
-                <div className="mt-6 flex items-end gap-1">
-                  <span className="text-sm text-white/70">Mulai dari</span>
-                  <span className="text-4xl font-extrabold">Rp {selectedProduct.price}</span>
-                </div>
+              {/* Video Player */}
+              <div className="relative aspect-video w-full bg-gray-900">
+                <iframe
+                  ref={videoRef}
+                  src={`${activeProduct.videoUrl}?autoplay=1&rel=0`}
+                  title={activeProduct.name}
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
               </div>
 
-              {/* Body */}
-              <div className="p-8 space-y-8">
-                <p className="text-gray-600 leading-relaxed">{selectedProduct.desc}</p>
-
-                {/* All Features */}
-                <div>
-                  <h4 className="font-semibold text-lg mb-4">Fitur Lengkap</h4>
-                  <div className="grid gap-2.5 sm:grid-cols-2">
-                    {selectedProduct.features.map((f) => (
-                      <div key={f} className="flex items-start gap-2.5 text-sm">
-                        <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${selectedProduct.badgeBg}`}>
-                          <Check className={`h-3 w-3 ${selectedProduct.textColor}`} />
-                        </div>
-                        <span className="text-gray-600">{f}</span>
+              {/* Product info below video */}
+              <div className="p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${activeProduct.badgeBg} ${activeProduct.textColor}`}>
+                        <activeProduct.icon className="h-5 w-5" />
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Tech Stack */}
-                <div>
-                  <h4 className="font-semibold text-lg mb-3">Tech Stack</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedProduct.stack.map((s) => (
-                      <span key={s} className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-600">{s}</span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Preview mockup */}
-                <div>
-                  <h4 className="font-semibold text-lg mb-3">Preview Aplikasi</h4>
-                  <div className={`rounded-xl border-2 ${selectedProduct.lightBorder} bg-gradient-to-br ${selectedProduct.lightBg} p-6`}>
-                    <div className="grid grid-cols-4 gap-3">
-                      {selectedProduct.preview.map((p) => (
-                        <div key={p.label} className="flex flex-col items-center gap-2">
-                          <div className={`flex h-14 w-14 items-center justify-center rounded-xl bg-white border ${selectedProduct.lightBorder} shadow-sm`}>
-                            <p.icon className={`h-6 w-6 ${selectedProduct.textColor}`} />
-                          </div>
-                          <span className="text-[10px] font-medium text-gray-500 text-center">{p.label}</span>
-                        </div>
-                      ))}
+                      <div>
+                        <h3 className="font-bold text-lg">{activeProduct.name}</h3>
+                        <p className="text-sm text-gray-400">{activeProduct.tagline}</p>
+                      </div>
                     </div>
                   </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl font-extrabold text-gray-900">Rp {activeProduct.price}</span>
+                    <a href="#kontak" onClick={() => setActiveProduct(null)} className="flex-1 sm:flex-none">
+                      <Button className={`rounded-full px-6 font-semibold bg-gradient-to-r ${activeProduct.gradient} text-white shadow-sm gap-2`}>
+                        Pesan Sekarang <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </a>
+                  </div>
                 </div>
 
-                {/* CTA */}
-                <div className="flex gap-3 pt-2">
-                  <a href="#kontak" onClick={() => setSelectedProduct(null)} className="flex-1">
-                    <Button className={`w-full rounded-full py-5 text-base font-semibold bg-gradient-to-r ${selectedProduct.gradient} text-white shadow-lg gap-2`}>
-                      Pesan Sekarang <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </a>
-                  <a href="#harga" onClick={() => setSelectedProduct(null)}>
-                    <Button variant="outline" className="rounded-full px-6 border-gray-200">
-                      Lihat Harga
-                    </Button>
-                  </a>
+                <p className="mt-4 text-sm text-gray-500 leading-relaxed">{activeProduct.desc}</p>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {activeProduct.features.slice(0, 5).map((f) => (
+                    <span key={f} className="inline-flex items-center gap-1 rounded-full bg-gray-50 border border-gray-100 px-2.5 py-1 text-xs text-gray-600">
+                      <Check className="h-3 w-3 text-emerald-500" />{f}
+                    </span>
+                  ))}
+                  {activeProduct.features.length > 5 && (
+                    <span className="inline-flex items-center rounded-full bg-gray-50 border border-gray-100 px-2.5 py-1 text-xs text-gray-400">
+                      +{activeProduct.features.length - 5} fitur
+                    </span>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -484,9 +502,9 @@ export default function Home() {
       </section>
 
       {/* ─── Harga ──────────────────────────────────── */}
-      <section id="harga" className="py-16 md:py-20">
+      <section id="harga" className="py-14 md:py-20">
         <div className="mx-auto max-w-5xl px-5">
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <p className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Daftar Harga</p>
             <h2 className="mt-2 text-2xl font-bold md:text-3xl">Harga Transparan, Bayar Sekali</h2>
           </div>
@@ -496,36 +514,34 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, margin: '-40px' }}
             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-            className="grid gap-5 md:grid-cols-3"
+            className="grid gap-5 md:grid-cols-2 lg:grid-cols-4"
           >
             {products.map((product, idx) => (
               <motion.div key={product.id} variants={fadeUp} custom={idx}>
                 <Card className={`rounded-2xl h-full border-2 hover:shadow-lg transition-shadow ${product.lightBorder}`}>
                   <div className={`h-1.5 rounded-t-2xl bg-gradient-to-r ${product.gradient}`} />
-                  <CardContent className="pt-6 pb-6">
-                    <div className="flex items-center gap-3 mb-4">
+                  <CardContent className="pt-5 pb-5">
+                    <div className="flex items-center gap-3 mb-3">
                       <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${product.badgeBg} ${product.textColor}`}>
                         <product.icon className="h-5 w-5" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg">{product.name}</h3>
-                        <p className="text-xs text-gray-400">{product.tagline}</p>
+                        <h3 className="font-bold text-base">{product.name}</h3>
                       </div>
                     </div>
 
-                    <div className="mb-5 flex items-baseline gap-1">
+                    <div className="mb-4 flex items-baseline gap-1">
                       <span className="text-sm text-gray-400">Rp</span>
                       <span className="text-3xl font-extrabold">{product.price}</span>
                       <span className="text-sm text-gray-400">/lisensi</span>
                     </div>
 
-                    <ul className="space-y-2 mb-6">
+                    <ul className="space-y-2 mb-5">
                       {[
                         'Source code lengkap',
                         'Panduan deploy PDF',
-                        'Support WhatsApp 6 bulan',
+                        'Support WA 6 bulan',
                         'Update gratis 6 bulan',
-                        '1 domain / lisensi',
                       ].map((item) => (
                         <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
                           <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
@@ -535,7 +551,7 @@ export default function Home() {
                     </ul>
 
                     <a href="#kontak">
-                      <Button className={`w-full rounded-full py-5 font-semibold bg-gradient-to-r ${product.gradient} text-white shadow-sm gap-2`}>
+                      <Button className={`w-full rounded-full py-5 font-semibold bg-gradient-to-r ${product.gradient} text-white shadow-sm gap-2 text-sm`}>
                         Pesan <ArrowRight className="h-4 w-4" />
                       </Button>
                     </a>
@@ -552,12 +568,12 @@ export default function Home() {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="rounded-full bg-emerald-600 px-3 py-0.5 text-xs font-semibold text-white">Bundle Hemat</span>
-                    <span className="text-sm text-gray-400">Beli semua 3 aplikasi</span>
+                    <span className="text-sm text-gray-400">Beli semua 4 aplikasi</span>
                   </div>
                   <div className="mt-2 flex items-baseline gap-2">
-                    <span className="text-sm text-gray-400 line-through">Rp 747K</span>
-                    <span className="text-3xl font-extrabold text-emerald-700">Rp 499K</span>
-                    <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600">Hemat 33%</span>
+                    <span className="text-sm text-gray-400 line-through">Rp 996K</span>
+                    <span className="text-3xl font-extrabold text-emerald-700">Rp 599K</span>
+                    <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600">Hemat 40%</span>
                   </div>
                 </div>
                 <a href="#kontak">
@@ -572,7 +588,7 @@ export default function Home() {
       </section>
 
       {/* ─── FAQ ────────────────────────────────────── */}
-      <section id="faq" className="py-16 md:py-20 bg-gray-50 border-y border-gray-100">
+      <section id="faq" className="py-14 md:py-20 bg-gray-50 border-y border-gray-100">
         <div className="mx-auto max-w-2xl px-5">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold md:text-3xl">Pertanyaan Umum</h2>
@@ -589,7 +605,7 @@ export default function Home() {
       </section>
 
       {/* ─── Kontak ─────────────────────────────────── */}
-      <section id="kontak" className="py-16 md:py-24">
+      <section id="kontak" className="py-14 md:py-20">
         <div className="mx-auto max-w-xl px-5 text-center">
           <h2 className="text-2xl font-bold md:text-3xl">Tertarik? Hubungi Kami</h2>
           <p className="mt-3 text-gray-500">Pilih produk yang diinginkan, kami akan kirim source code + panduannya.</p>
@@ -613,7 +629,7 @@ export default function Home() {
                 </div>
                 <div className="mt-4">
                   <label className="mb-1.5 block text-sm font-medium text-gray-700">Produk yang Diminati</label>
-                  <Input name="deskripsi" placeholder="Aplikasi Zakat / Taunan Sekolah / Sikurban / Bundle" required className="rounded-lg" />
+                  <Input name="deskripsi" placeholder="Aplikasi Zakat / Tabungan Sekolah / Sikurban / Kas Masjid / Bundle" required className="rounded-lg" />
                 </div>
                 <Button type="submit" disabled={submitting} className="mt-4 w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-full py-5 gap-2">
                   {submitting ? 'Mengirim...' : <>Kirim Pesan <Send className="h-4 w-4" /></>}
@@ -632,7 +648,7 @@ export default function Home() {
       </section>
 
       {/* ─── Footer ─────────────────────────────────── */}
-      <footer className="border-t border-gray-100 bg-gray-50/50">
+      <footer className="border-t border-gray-100 bg-gray-50/50 mt-auto">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-5 py-8 text-center md:flex-row md:justify-between md:text-left">
           <div>
             <div className="flex items-center justify-center gap-2 md:justify-start">
@@ -641,7 +657,7 @@ export default function Home() {
             </div>
             <p className="mt-1 text-xs text-gray-400">Aplikasi web siap pakai + Google Sheets backend.</p>
           </div>
-          <p className="text-xs text-gray-400">© {new Date().getFullYear()} AkademiDigital. All rights reserved.</p>
+          <p className="text-xs text-gray-400">&copy; {new Date().getFullYear()} AkademiDigital. All rights reserved.</p>
         </div>
       </footer>
 
