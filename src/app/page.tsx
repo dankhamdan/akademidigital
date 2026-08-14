@@ -1,64 +1,30 @@
 'use client'
 
-import { useState, useEffect, useCallback, type FormEvent } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import {
-  Menu,
   ArrowRight,
   Check,
-  Copy,
-  CheckCheck,
-  Users,
-  ClipboardCheck,
-  Calculator,
-  List,
-  CalendarClock,
-  HelpCircle,
-  Code2,
   Globe,
-  Send,
-  MessageCircle,
-  ChevronRight,
-  Sparkles,
-  Star,
   Zap,
   Shield,
-  Rocket,
-  LayoutGrid,
-  Database,
-  Server,
   Smartphone,
+  ChevronDown,
+  Star,
+  Send,
+  Menu,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import {
   Accordion,
   AccordionContent,
@@ -71,1397 +37,473 @@ import {
   SheetTrigger,
   SheetTitle,
 } from '@/components/ui/sheet'
-import { Badge } from '@/components/ui/badge'
 import { Toaster, toast } from 'sonner'
 
-// ─── Animation Variants ─────────────────────────────────────
+// ─── Animations ──────────────────────────────────────────────
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.6, ease: 'easeOut' },
+    transition: { delay: i * 0.08, duration: 0.5, ease: 'easeOut' },
   }),
 }
 
-const stagger = {
-  visible: { transition: { staggerChildren: 0.1 } },
-}
-
-// ─── Data ────────────────────────────────────────────────────
+// ─── Data ─────────────────────────────────────────────────────
 const navLinks = [
   { label: 'Layanan', href: '#layanan' },
-  { label: 'Demo', href: '#demo' },
-  { label: 'Tutorial', href: '#tutorial' },
   { label: 'Harga', href: '#harga' },
-  { label: 'Deploy', href: '#deploy' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Kontak', href: '#kontak' },
 ]
 
-const services = [
+const fiturList = [
   {
-    icon: Users,
-    title: 'Sistem Pendaftaran Online',
-    desc: 'Form pendaftaran yang terhubung langsung ke Google Sheets. Cocok untuk pendaftaran event, workshop, atau organisasi.',
-    price: 'Rp 250.000',
+    icon: Globe,
+    title: 'Website Modern',
+    desc: 'Desain responsif dan profesional, siap pakai tanpa coding.',
   },
   {
-    icon: ClipboardCheck,
-    title: 'Dashboard Absensi',
-    desc: 'Sistem absensi digital dengan laporan otomatis. Data tersimpan rapi di spreadsheet dan bisa diakses kapan saja.',
-    price: 'Rp 350.000',
+    icon: Zap,
+    title: 'Cepat Jadi',
+    desc: 'Dalam 24 jam website Anda sudah live dan bisa diakses.',
   },
   {
-    icon: Calculator,
-    title: 'Kalkulator Keuangan',
-    desc: 'Kalkulator interaktif untuk simulasi tabungan, kredit, atau keuangan pribadi dengan grafik dan ringkasan.',
-    price: 'Rp 300.000',
+    icon: Shield,
+    title: 'Aman & Stabil',
+    desc: 'Hosting Vercel — serverless, auto-scaling, 99.9% uptime.',
   },
   {
-    icon: List,
-    title: 'Direktori / Listing',
-    desc: 'Halaman direktori dengan pencarian dan filter. Data dikelola lewat Google Sheets, tampil profesional.',
-    price: 'Rp 400.000',
-  },
-  {
-    icon: CalendarClock,
-    title: 'Sistem Booking / Jadwal',
-    desc: 'Sistem reservasi atau penjadwalan online. Pengguna bisa cek ketersediaan dan booking langsung.',
-    price: 'Rp 450.000',
-  },
-  {
-    icon: HelpCircle,
-    title: 'Kuis / Trivia Online',
-    desc: 'Kuis interaktif dengan scoring otomatis. Hasil langsung tersimpan dan bisa ditampilkan sebagai leaderboard.',
-    price: 'Rp 350.000',
+    icon: Smartphone,
+    title: 'Responsif',
+    desc: 'Tampilan sempurna di HP, tablet, dan laptop.',
   },
 ]
 
-const pricingPlans = [
+const hargaList = [
   {
-    name: 'Basic',
-    price: 'Rp 250.000',
-    desc: 'Cocok untuk kebutuhan dasar',
+    name: 'Starter',
+    price: '299K',
+    desc: 'Cocok untuk bisnis kecil & UMKM',
     features: [
-      'Form pendaftaran',
-      'Data tersimpan ke Google Sheets',
-      'Halaman cek status',
+      '1 halaman landing page',
       'Desain responsif',
-      '1x revisi',
+      'Hosting Vercel (1 tahun)',
+      'Domain .vercel.app gratis',
+      'Revisi 2x',
     ],
     popular: false,
   },
   {
-    name: 'Standard',
-    price: 'Rp 450.000',
-    desc: 'Paling populer untuk bisnis kecil',
+    name: 'Professional',
+    price: '599K',
+    desc: 'Untuk bisnis yang ingin tampil profesional',
     features: [
-      'CRUD lengkap',
-      'Email notifikasi otomatis',
-      'Responsive design',
-      'Dashboard admin sederhana',
-      '3x revisi',
-      'Dokumentasi penggunaan',
+      '3 halaman website',
+      'Desain premium responsif',
+      'Hosting Vercel (1 tahun)',
+      'Domain custom gratis',
+      'Form kontak & WhatsApp',
+      'Revisi 5x',
+      'SEO optimal',
     ],
     popular: true,
   },
   {
-    name: 'Premium',
-    price: 'Rp 750.000',
-    desc: 'Solusi lengkap untuk skala besar',
+    name: 'Business',
+    price: '999K',
+    desc: 'Solusi lengkap untuk growing business',
     features: [
-      'Full system dengan login',
-      'Custom branding',
-      'Support 1 bulan',
-      'Integrasi multi-sheet',
-      'API lanjutan',
-      'Unlimited revisi',
-      'Optimasi performa',
+      '5 halaman website',
+      'Desain premium + animasi',
+      'Hosting Vercel (1 tahun)',
+      'Domain custom gratis',
+      'Google Sheets backend',
+      'Dashboard admin',
+      'Revisi unlimited',
+      'Support 3 bulan',
     ],
     popular: false,
   },
 ]
 
-const tutorials = [
+const faqList = [
   {
-    title: 'Membaca Data dari Google Sheets',
-    code: `function bacaData() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet();
-  const data = sheet.getDataRange().getValues();
-  
-  // Konversi baris pertama menjadi header
-  const headers = data[0];
-  const rows = data.slice(1).map(row => {
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = row[i]);
-    return obj;
-  });
-  
-  return ContentService
-    .createTextOutput(JSON.stringify(rows))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-// Endpoint GET
-function doGet() {
-  return bacaData();
-}`,
+    q: 'Apakah saya perlu paham coding?',
+    a: 'Tidak perlu sama sekali! Semua proses pembuatan, deploy, dan maintenance kami tangani. Anda hanya perlu siapkan konten dan gambar.',
   },
   {
-    title: 'Menulis Data ke Google Sheets',
-    code: `function tulisData(data) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet()
-    .getSheetByName('Data');
-  
-  // Ambil header dari baris pertama
-  const headers = sheet.getRange(1, 1, 1, 
-    sheet.getLastColumn()).getValues()[0];
-  
-  // Tambahkan baris baru
-  const newRow = headers.map(h => data[h] || '');
-  sheet.appendRow(newRow);
-  
-  return { status: 'success', message: 'Data tersimpan!' };
-}
-
-// Endpoint POST
-function doPost(e) {
-  const data = JSON.parse(e.postData.contents);
-  const result = tulisData(data);
-  return ContentService
-    .createTextOutput(JSON.stringify(result))
-    .setMimeType(ContentService.MimeType.JSON);
-}`,
+    q: 'Berapa lama website saya jadi?',
+    a: 'Untuk paket Starter 1-2 hari kerja, Professional 3-5 hari kerja, dan Business 5-7 hari kerja.',
   },
   {
-    title: 'Deploy sebagai Web App',
-    code: `// Langkah-langkah deploy:
-//
-// 1. Buka Google Sheets > Extensions > Apps Script
-// 2. Tulis kode doGet() dan doPost() Anda
-// 3. Klik "Deploy" > "New deployment"
-// 4. Pilih tipe "Web app"
-// 5. Atur:
-//    - Description: "API Pendaftaran"
-//    - Execute as: "Me"
-//    - Who has access: "Anyone"
-// 6. Klik "Deploy"
-// 7. Salin URL web app yang diberikan
-//
-// Contoh penggunaan di frontend:
-const WEB_APP_URL = 'https://script.google.com/...';
-
-async function kirimData(data) {
-  const response = await fetch(WEB_APP_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(data),
-  });
-  return await response.json();
-}`,
+    q: 'Apa itu Google Sheets backend?',
+    a: 'Data dari form kontak, pendaftaran, dan pesan pengunjung website Anda akan otomatis tersimpan di Google Sheets. Jadi Anda bisa kelola data dengan mudah tanpa database rumit.',
+  },
+  {
+    q: 'Domain custom itu apa?',
+    a: 'Anda bisa pakai domain sendiri seperti namabisnis.com. Kami bantu setup DNS dan koneksi ke Vercel.',
+  },
+  {
+    q: 'Bagaimana cara revisi?',
+    a: 'Setelah website jadi, Anda kirimkan feedback revisi via WhatsApp. Kami kerjakan revisi sesuai paket yang dipilih.',
   },
 ]
 
-// ─── Types ───────────────────────────────────────────────────
-interface Registration {
-  id: string
-  nama: string
-  email: string
-  noHp: string
-  kategori: string
-  createdAt: string
-}
-
-// ─── Architecture Diagram ────────────────────────────────────
-function ArchitectureDiagram() {
-  return (
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mt-12">
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
-        className="flex flex-col items-center gap-3"
-      >
-        <div className="w-32 h-24 sm:w-44 sm:h-32 rounded-2xl bg-emerald-50 border-2 border-emerald-400 flex flex-col items-center justify-center gap-2 shadow-md">
-          <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-600" />
-          <span className="text-sm sm:text-base font-bold text-emerald-700">Next.js</span>
-          <span className="text-[10px] sm:text-xs text-emerald-500">Frontend + Vercel</span>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.7, duration: 0.5 }}
-        className="flex items-center"
-      >
-        <ChevronRight className="w-7 h-7 text-muted-foreground rotate-90 sm:rotate-0 hidden sm:block" />
-        <ArrowRight className="w-7 h-7 text-muted-foreground block sm:hidden" />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-        className="flex flex-col items-center gap-3"
-      >
-        <div className="w-32 h-24 sm:w-44 sm:h-32 rounded-2xl bg-orange-50 border-2 border-orange-300 flex flex-col items-center justify-center gap-2 shadow-md">
-          <Code2 className="w-8 h-8 sm:w-10 sm:h-10 text-orange-600" />
-          <span className="text-sm sm:text-base font-bold text-orange-700">Apps Script</span>
-          <span className="text-[10px] sm:text-xs text-orange-500">API / Backend</span>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.8, duration: 0.5 }}
-        className="flex items-center"
-      >
-        <ChevronRight className="w-7 h-7 text-muted-foreground rotate-90 sm:rotate-0 hidden sm:block" />
-        <ArrowRight className="w-7 h-7 text-muted-foreground block sm:hidden" />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, x: 30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.9, duration: 0.5 }}
-        className="flex flex-col items-center gap-3"
-      >
-        <div className="w-32 h-24 sm:w-44 sm:h-32 rounded-2xl bg-green-50 border-2 border-green-400 flex flex-col items-center justify-center gap-2 shadow-md">
-          <Database className="w-8 h-8 sm:w-10 sm:h-10 text-green-600" />
-          <span className="text-sm sm:text-base font-bold text-green-700">Google Sheets</span>
-          <span className="text-[10px] sm:text-xs text-green-500">Database</span>
-        </div>
-      </motion.div>
-    </div>
-  )
-}
-
-// ─── Stats Section ──────────────────────────────────────────
-const stats = [
-  { label: 'Proyek Selesai', value: '50+' },
-  { label: 'Klien Puas', value: '40+' },
-  { label: 'Uptime 99.9%', value: '99.9%' },
-  { label: 'Support 24/7', value: '24/7' },
-]
-
-// ─── Copy Button for Code ────────────────────────────────────
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false)
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-  return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={handleCopy}
-      className="h-10 w-10 absolute top-3 right-3 text-white/70 hover:text-white hover:bg-white/10"
-    >
-      {copied ? <CheckCheck className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-    </Button>
-  )
-}
-
-// ─── Main Page ───────────────────────────────────────────────
+// ─── Component ────────────────────────────────────────────────
 export default function Home() {
-  // Demo form state
-  const [regNama, setRegNama] = useState('')
-  const [regEmail, setRegEmail] = useState('')
-  const [regNoHp, setRegNoHp] = useState('')
-  const [regKategori, setRegKategori] = useState('')
-  const [regLoading, setRegLoading] = useState(false)
-  const [registrations, setRegistrations] = useState<Registration[]>([])
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
-  // Contact form state
-  const [contactNama, setContactNama] = useState('')
-  const [contactEmail, setContactEmail] = useState('')
-  const [contactDesc, setContactDesc] = useState('')
-  const [contactLoading, setContactLoading] = useState(false)
-
-  const fetchRegistrations = useCallback(async () => {
-    try {
-      const res = await fetch('/api/register')
-      const json = await res.json()
-      setRegistrations(json.data || [])
-    } catch {
-      // silent fail
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchRegistrations()
-  }, [fetchRegistrations])
-
-  const handleRegSubmit = async (e: FormEvent) => {
+  const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!regNama || !regEmail || !regNoHp || !regKategori) {
-      toast.error('Semua field wajib diisi')
-      return
-    }
-    setRegLoading(true)
-    try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nama: regNama,
-          email: regEmail,
-          noHp: regNoHp,
-          kategori: regKategori,
-        }),
-      })
-      const json = await res.json()
-      if (res.ok) {
-        toast.success('Pendaftaran berhasil!')
-        setRegNama('')
-        setRegEmail('')
-        setRegNoHp('')
-        setRegKategori('')
-        fetchRegistrations()
-      } else {
-        toast.error(json.error || 'Terjadi kesalahan')
-      }
-    } catch {
-      toast.error('Gagal menghubungi server')
-    } finally {
-      setRegLoading(false)
-    }
-  }
+    setSubmitting(true)
+    const form = e.currentTarget
+    const data = new FormData(form)
 
-  const handleContactSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    if (!contactNama || !contactEmail || !contactDesc) {
-      toast.error('Semua field wajib diisi')
-      return
-    }
-    setContactLoading(true)
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nama: contactNama,
-          email: contactEmail,
-          deskripsi: contactDesc,
+          nama: data.get('nama'),
+          email: data.get('email'),
+          deskripsi: data.get('deskripsi'),
         }),
       })
-      const json = await res.json()
+
       if (res.ok) {
-        toast.success(json.message)
-        setContactNama('')
-        setContactEmail('')
-        setContactDesc('')
+        toast.success('Pesan terkirim! Kami akan segera menghubungi Anda.')
+        form.reset()
       } else {
-        toast.error(json.error || 'Terjadi kesalahan')
+        toast.error('Gagal mengirim pesan. Coba lagi.')
       }
     } catch {
-      toast.error('Gagal menghubungi server')
+      toast.error('Terjadi kesalahan. Coba lagi nanti.')
     } finally {
-      setContactLoading(false)
+      setSubmitting(false)
     }
   }
 
-  const scrollTo = (href: string) => {
-    const el = document.querySelector(href)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Toaster richColors position="top-center" />
-
-      {/* ── Navigation Bar ────────────────────────────── */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-        <div className="mx-auto max-w-[90rem] flex h-20 items-center justify-between px-6 sm:px-10">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-2xl sm:text-3xl font-black tracking-tight text-primary hover:opacity-80 transition-opacity"
-          >
-            <span className="bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
-              Akademi
-            </span>
-            <span className="text-primary">Digital</span>
-          </button>
+    <div className="min-h-screen flex flex-col bg-white text-gray-900">
+      {/* ─── Navbar ─────────────────────────────────── */}
+      <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+          <a href="#" className="text-lg font-bold tracking-tight text-emerald-700">
+            AkademiDigital
+          </a>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => scrollTo(link.href)}
-                className="text-lg font-semibold text-muted-foreground hover:text-foreground transition-colors"
+          <nav className="hidden items-center gap-6 md:flex">
+            {navLinks.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="text-sm text-gray-600 transition hover:text-emerald-600"
               >
-                {link.label}
-              </button>
+                {l.label}
+              </a>
             ))}
-            <Button
-              size="lg"
-              className="text-lg px-7 py-6 font-bold"
-              onClick={() => scrollTo('#kontak')}
-            >
-              Pesan Sekarang
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <a href="#kontak">
+              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                Hubungi Kami
+              </Button>
+            </a>
           </nav>
 
           {/* Mobile nav */}
-          <Sheet>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="w-12 h-12">
-                <Menu className="h-7 w-7" />
-                <span className="sr-only">Menu</span>
+          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80">
-              <SheetTitle className="text-2xl font-black text-primary mb-6">
-                AkademiDigital
-              </SheetTitle>
-              <nav className="flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <button
-                    key={link.href}
-                    onClick={() => {
-                      scrollTo(link.href)
-                      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
-                    }}
-                    className="text-lg font-semibold text-muted-foreground hover:text-foreground transition-colors text-left py-3 border-b border-border/50"
+            <SheetContent side="right" className="w-64">
+              <SheetTitle className="text-emerald-700 font-bold">AkademiDigital</SheetTitle>
+              <nav className="mt-8 flex flex-col gap-4">
+                {navLinks.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-base text-gray-700 transition hover:text-emerald-600"
                   >
-                    {link.label}
-                  </button>
+                    {l.label}
+                  </a>
                 ))}
-                <Button
-                  size="lg"
-                  className="mt-4 text-lg py-6 font-bold"
-                  onClick={() => scrollTo('#kontak')}
-                >
-                  Pesan Sekarang
-                </Button>
+                <a href="#kontak" onClick={() => setMenuOpen(false)}>
+                  <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white mt-2">
+                    Hubungi Kami
+                  </Button>
+                </a>
               </nav>
             </SheetContent>
           </Sheet>
         </div>
       </header>
 
-      <main className="flex-1">
-        {/* ── Hero Section ──────────────────────────────── */}
-        <section className="relative overflow-hidden py-24 sm:py-36 px-6 sm:px-10">
-          {/* Background decoration */}
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] bg-gradient-to-b from-emerald-100/50 via-emerald-50/20 to-transparent rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-green-100/30 to-transparent rounded-full blur-3xl" />
-            <div className="absolute top-20 left-0 w-[300px] h-[300px] bg-gradient-to-br from-emerald-50/40 to-transparent rounded-full blur-3xl" />
-          </div>
-
-          <div className="mx-auto max-w-6xl text-center">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={stagger}
-              className="flex flex-col items-center"
+      {/* ─── Hero ───────────────────────────────────── */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-teal-50" />
+        <div className="relative mx-auto max-w-5xl px-4 py-20 md:py-28 text-center">
+          <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.08 } } }}>
+            <motion.div variants={fadeUp} custom={0}>
+              <span className="inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700 mb-4">
+                ✨ Website Profesional untuk Bisnis Anda
+              </span>
+            </motion.div>
+            <motion.h1
+              variants={fadeUp}
+              custom={1}
+              className="text-3xl font-extrabold leading-tight tracking-tight md:text-5xl"
             >
-              <motion.div variants={fadeUp} custom={0}>
-                <Badge variant="secondary" className="mb-8 px-6 py-2.5 text-base font-bold tracking-wide">
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Solusi Web Hemat Biaya — Next.js + Vercel
-                </Badge>
-              </motion.div>
-              <motion.h1
-                variants={fadeUp}
-                custom={1}
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tighter text-foreground leading-[1.05]"
-              >
-                Bangun Aplikasi Web{' '}
-                <span className="bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
-                  Tanpa Server Mahal
-                </span>
-              </motion.h1>
-              <motion.p
-                variants={fadeUp}
-                custom={2}
-                className="mt-8 sm:mt-10 text-xl sm:text-2xl md:text-[1.6rem] text-muted-foreground max-w-4xl leading-relaxed font-medium"
-              >
-                Gunakan <strong className="text-foreground">Google Sheets</strong> sebagai database,{' '}
-                <strong className="text-foreground">Google Apps Script</strong> sebagai API, dan deploy frontend dengan{' '}
-                <strong className="text-foreground">Next.js + Vercel</strong>. Hemat biaya, cepat jadi, mudah dikelola.
-              </motion.p>
-              <motion.div
-                variants={fadeUp}
-                custom={3}
-                className="mt-12 flex flex-col sm:flex-row gap-5 sm:gap-6"
-              >
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto text-xl px-10 py-8 font-bold shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:shadow-emerald-600/30"
-                  onClick={() => scrollTo('#demo')}
-                >
-                  <Zap className="mr-2 h-6 w-6" />
-                  Lihat Demo
-                  <ArrowRight className="ml-2 h-6 w-6" />
+              Website Modern dengan{' '}
+              <span className="text-emerald-600">Google Sheets Backend</span>
+            </motion.h1>
+            <motion.p
+              variants={fadeUp}
+              custom={2}
+              className="mx-auto mt-4 max-w-2xl text-base text-gray-500 md:text-lg"
+            >
+              Kami buatkan website profesional yang terhubung langsung ke Google Sheets Anda.
+              Tanpa server rumit, tanpa database mahal — cukup spreadsheet yang Anda sudah kenal.
+            </motion.p>
+            <motion.div variants={fadeUp} custom={3} className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <a href="#harga">
+                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+                  Lihat Paket Harga <ArrowRight className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto text-xl px-10 py-8 font-bold"
-                  onClick={() => scrollTo('#kontak')}
-                >
-                  Pesan Sekarang
+              </a>
+              <a href="#layanan">
+                <Button size="lg" variant="outline" className="border-gray-300">
+                  Pelajari Lebih Lanjut
                 </Button>
-              </motion.div>
-
-              {/* Architecture diagram */}
-              <motion.div variants={fadeUp} custom={4} className="w-full">
-                <ArchitectureDiagram />
-              </motion.div>
+              </a>
             </motion.div>
-          </div>
-        </section>
+          </motion.div>
+        </div>
+      </section>
 
-        {/* ── Stats Section ─────────────────────────────── */}
-        <section className="py-16 sm:py-20 px-6 sm:px-10 bg-muted/50 border-y">
-          <div className="mx-auto max-w-6xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12"
-            >
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  variants={fadeUp}
-                  custom={i}
-                  className="text-center"
-                >
-                  <div className="text-4xl sm:text-5xl font-black text-emerald-600">{stat.value}</div>
-                  <div className="mt-2 text-lg sm:text-xl font-semibold text-muted-foreground">{stat.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Cara Kerja Section ───────────────────────── */}
-        <section id="layanan" className="py-24 sm:py-32 px-6 sm:px-10">
-          <div className="mx-auto max-w-6xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16 sm:mb-20"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Cara Kerja
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Tiga langkah sederhana untuk membangun aplikasi web Anda
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12"
-            >
-              {[
-                {
-                  step: 1,
-                  icon: Database,
-                  title: 'Buat Google Sheet',
-                  desc: 'Data disimpan di spreadsheet. Buat kolom sesuai kebutuhan Anda, lalu biarkan Apps Script mengurus sisanya.',
-                },
-                {
-                  step: 2,
-                  icon: Code2,
-                  title: 'Setup Apps Script',
-                  desc: 'API penghubung otomatis yang menghubungkan frontend dengan Google Sheets. Tinggal deploy, langsung jalan.',
-                },
-                {
-                  step: 3,
-                  icon: Rocket,
-                  title: 'Deploy ke Vercel',
-                  desc: 'Frontend Next.js siap pakai, deploy gratis ke Vercel. Responsif, cepat, dan profesional.',
-                },
-              ].map((item) => (
-                <motion.div
-                  key={item.step}
-                  variants={fadeUp}
-                  custom={item.step}
-                  className="relative flex flex-col items-center text-center"
-                >
-                  {/* Step number and connecting line (desktop) */}
-                  <div className="hidden md:block absolute top-12 left-1/2 -translate-x-1/2">
-                    {item.step < 3 && (
-                      <div className="w-[calc(100%+2.5rem)] h-px bg-primary/20 absolute top-1/2 left-1/2 -translate-y-1/2" />
-                    )}
-                  </div>
-                  <div className="relative z-10 w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center mb-6 border border-primary/20 shadow-sm">
-                    <item.icon className="w-12 h-12 text-primary" />
-                  </div>
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-600 text-white text-lg font-black mb-4 shadow-md">
-                    {item.step}
-                  </span>
-                  <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
-                    {item.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Layanan (Services) Section ────────────────── */}
-        <section className="py-24 sm:py-32 px-6 sm:px-10 bg-muted/40">
-          <div className="mx-auto max-w-[80rem]">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16 sm:mb-20"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Layanan Kami
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Berbagai solusi aplikasi web berbasis Google Sheets + Next.js
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              {services.map((svc, i) => (
-                <motion.div key={svc.title} variants={fadeUp} custom={i}>
-                  <Card className="h-full hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group p-2">
-                    <CardHeader>
-                      <div className="w-18 h-18 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4 group-hover:bg-emerald-100 transition-colors p-4">
-                        <svc.icon className="w-10 h-10 text-emerald-600" />
-                      </div>
-                      <CardTitle className="text-2xl font-bold">{svc.title}</CardTitle>
-                      <CardDescription className="text-lg leading-relaxed">
-                        {svc.desc}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardFooter className="flex items-center justify-between mt-auto pt-4">
-                      <span className="text-lg font-bold text-emerald-600">Mulai {svc.price}</span>
-                      <Button variant="ghost" size="lg" className="text-emerald-600 font-semibold" onClick={() => scrollTo('#kontak')}>
-                        Pesan <ArrowRight className="ml-1 h-5 w-5" />
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Demo Section ─────────────────────────────── */}
-        <section id="demo" className="py-24 sm:py-32 px-6 sm:px-10">
-          <div className="mx-auto max-w-6xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Coba Demo Langsung
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Isi form di bawah dan lihat bagaimana data langsung tersimpan dan ditampilkan — seperti konsep Google Sheets + Frontend
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-10"
-            >
-              {/* Registration Form */}
-              <motion.div variants={fadeUp} custom={0}>
-                <Card className="p-2">
-                  <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Form Pendaftaran</CardTitle>
-                    <CardDescription className="text-lg">Data akan tersimpan ke mock database</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleRegSubmit} className="space-y-5">
-                      <div className="space-y-2.5">
-                        <Label htmlFor="reg-nama" className="text-lg font-semibold">Nama</Label>
-                        <Input
-                          id="reg-nama"
-                          placeholder="Masukkan nama lengkap"
-                          value={regNama}
-                          onChange={(e) => setRegNama(e.target.value)}
-                          className="h-14 text-lg"
-                        />
-                      </div>
-                      <div className="space-y-2.5">
-                        <Label htmlFor="reg-email" className="text-lg font-semibold">Email</Label>
-                        <Input
-                          id="reg-email"
-                          type="email"
-                          placeholder="contoh@email.com"
-                          value={regEmail}
-                          onChange={(e) => setRegEmail(e.target.value)}
-                          className="h-14 text-lg"
-                        />
-                      </div>
-                      <div className="space-y-2.5">
-                        <Label htmlFor="reg-hp" className="text-lg font-semibold">No HP</Label>
-                        <Input
-                          id="reg-hp"
-                          type="tel"
-                          placeholder="08xxxxxxxxxx"
-                          value={regNoHp}
-                          onChange={(e) => setRegNoHp(e.target.value)}
-                          className="h-14 text-lg"
-                        />
-                      </div>
-                      <div className="space-y-2.5">
-                        <Label htmlFor="reg-kategori" className="text-lg font-semibold">Kategori</Label>
-                        <Select value={regKategori} onValueChange={setRegKategori}>
-                          <SelectTrigger id="reg-kategori" className="w-full h-14 text-lg">
-                            <SelectValue placeholder="Pilih kategori" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Pelajar">Pelajar</SelectItem>
-                            <SelectItem value="Guru">Guru</SelectItem>
-                            <SelectItem value="Lainnya">Lainnya</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <Button type="submit" className="w-full text-lg py-7 font-bold" disabled={regLoading}>
-                        {regLoading ? 'Mengirim...' : 'Daftar Sekarang'}
-                        {!regLoading && <Send className="ml-2 h-6 w-6" />}
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Data Table */}
-              <motion.div variants={fadeUp} custom={1}>
-                <Card className="p-2">
-                  <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Data Pendaftar</CardTitle>
-                    <CardDescription className="text-lg">{registrations.length} data terdaftar</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {registrations.length === 0 ? (
-                      <div className="text-center py-16 text-muted-foreground">
-                        <LayoutGrid className="w-16 h-16 mx-auto mb-4 text-muted-foreground/40" />
-                        <p className="text-xl font-semibold">Belum ada data</p>
-                        <p className="text-lg mt-1">Isi form di samping untuk mencoba!</p>
-                      </div>
-                    ) : (
-                      <div className="max-h-[28rem] overflow-y-auto rounded-lg border">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead className="w-[50px] text-base font-bold">#</TableHead>
-                              <TableHead className="text-base font-bold">Nama</TableHead>
-                              <TableHead className="hidden sm:table-cell text-base font-bold">Email</TableHead>
-                              <TableHead className="hidden md:table-cell text-base font-bold">No HP</TableHead>
-                              <TableHead className="text-base font-bold">Kategori</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {registrations.map((r, i) => (
-                              <TableRow key={r.id}>
-                                <TableCell className="font-mono text-sm text-muted-foreground">{i + 1}</TableCell>
-                                <TableCell className="font-semibold text-base">{r.nama}</TableCell>
-                                <TableCell className="hidden sm:table-cell text-muted-foreground text-base">{r.email}</TableCell>
-                                <TableCell className="hidden md:table-cell text-muted-foreground text-base">{r.noHp}</TableCell>
-                                <TableCell>
-                                  <Badge variant="secondary" className="text-sm font-semibold px-3 py-1">{r.kategori}</Badge>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Harga (Pricing) Section ───────────────────── */}
-        <section id="harga" className="py-24 sm:py-32 px-6 sm:px-10 bg-muted/40">
-          <div className="mx-auto max-w-6xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16 sm:mb-20"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Paket Harga
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Pilih paket yang sesuai dengan kebutuhan Anda
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 items-start"
-            >
-              {pricingPlans.map((plan, i) => (
-                <motion.div key={plan.name} variants={fadeUp} custom={i}>
-                  <Card
-                    className={`relative h-full flex flex-col p-2 ${
-                      plan.popular
-                        ? 'border-emerald-500 border-2 shadow-xl scale-[1.03]'
-                        : 'hover:shadow-lg'
-                    } transition-all duration-300`}
-                  >
-                    {plan.popular && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-emerald-600 text-white px-4 py-1.5 text-sm font-bold shadow-md">
-                          <Star className="w-4 h-4 mr-1.5" /> Paling Populer
-                        </Badge>
-                      </div>
-                    )}
-                    <CardHeader className="text-center pt-10 sm:pt-12">
-                      <CardTitle className="text-3xl font-black">{plan.name}</CardTitle>
-                      <CardDescription className="text-lg mt-1">{plan.desc}</CardDescription>
-                      <div className="mt-6">
-                        <span className="text-5xl font-black text-emerald-600">{plan.price}</span>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <ul className="space-y-5 mt-2">
-                        {plan.features.map((f) => (
-                          <li key={f} className="flex items-start gap-3 text-lg">
-                            <Check className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
-                            <span>{f}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                    <CardFooter className="mt-auto pt-6">
-                      <Button
-                        className={`w-full text-lg py-7 font-bold ${plan.popular ? 'bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/25' : ''}`}
-                        variant={plan.popular ? 'default' : 'outline'}
-                        onClick={() => scrollTo('#kontak')}
-                      >
-                        Pesan Sekarang
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Features / Benefits Section ───────────────── */}
-        <section className="py-24 sm:py-32 px-6 sm:px-10">
-          <div className="mx-auto max-w-6xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16 sm:mb-20"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Kenapa Pilih Kami?
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Keunggulan yang tidak akan Anda dapatkan di tempat lain
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-            >
-              {[
-                {
-                  icon: Zap,
-                  title: 'Cepat Jadi',
-                  desc: 'Deploy dalam hitungan menit. Tidak perlu setup server yang rumit.',
-                },
-                {
-                  icon: Shield,
-                  title: 'Aman & Stabil',
-                  desc: 'Google Sheets dan Vercel menjamin keamanan dan uptime data Anda.',
-                },
-                {
-                  icon: Server,
-                  title: 'Tanpa Server',
-                  desc: 'Tidak perlu beli hosting VPS. Semua berjalan di cloud gratis.',
-                },
-                {
-                  icon: Smartphone,
-                  title: 'Responsif',
-                  desc: 'Tampil sempurna di semua perangkat — desktop, tablet, dan mobile.',
-                },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.title}
-                  variants={fadeUp}
-                  custom={i}
-                  className="text-center"
-                >
-                  <div className="w-20 h-20 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-5 shadow-sm">
-                    <item.icon className="w-10 h-10 text-emerald-600" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed">{item.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Tutorial Section ──────────────────────────── */}
-        <section id="tutorial" className="py-24 sm:py-32 px-6 sm:px-10 bg-muted/40">
-          <div className="mx-auto max-w-5xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Belajar Google Apps Script
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Pelajari dasar-dasar Google Apps Script untuk membangun aplikasi Anda sendiri
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={fadeUp}
-              custom={0}
-            >
-              <Accordion type="single" collapsible className="w-full">
-                {tutorials.map((tut, i) => (
-                  <AccordionItem key={i} value={`tutorial-${i}`}>
-                    <AccordionTrigger className="text-xl font-bold hover:no-underline py-6">
-                      {tut.title}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="relative">
-                        <CopyButton text={tut.code} />
-                        <SyntaxHighlighter
-                          language="javascript"
-                          style={oneDark}
-                          customStyle={{
-                            borderRadius: '0.75rem',
-                            fontSize: '1rem',
-                            lineHeight: '1.8',
-                            padding: '1.5rem',
-                            margin: 0,
-                          }}
-                          wrapLongLines
-                        >
-                          {tut.code}
-                        </SyntaxHighlighter>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Panduan Deploy ke Vercel ─────────────────── */}
-        <section id="deploy" className="py-24 sm:py-32 px-6 sm:px-10">
-          <div className="mx-auto max-w-5xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16 sm:mb-20"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Panduan Deploy ke Vercel
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Ikuti langkah-langkah berikut untuk deploy project Next.js Anda ke Vercel — gratis!
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="space-y-8"
-            >
-              {[
-                {
-                  step: 1,
-                  title: 'Buat Akun GitHub',
-                  desc: 'Buka github.com dan buat akun gratis. GitHub akan digunakan untuk menyimpan kode project Anda.',
-                  detail: 'Jika sudah punya akun GitHub, lewati langkah ini.',
-                },
-                {
-                  step: 2,
-                  title: 'Push Kode ke GitHub',
-                  desc: 'Upload semua kode project Next.js ke repository GitHub baru. Bisa lewat terminal atau GitHub Desktop.',
-                  detail: 'Command: git init → git add . → git commit -m "initial" → git push',
-                },
-                {
-                  step: 3,
-                  title: 'Buat Akun Vercel',
-                  desc: 'Buka vercel.com dan daftar gratis menggunakan akun GitHub yang sudah dibuat.',
-                  detail: 'Login otomatis pakai GitHub, jadi tinggal klik "Continue with GitHub".',
-                },
-                {
-                  step: 4,
-                  title: 'Import Project di Vercel',
-                  desc: 'Di dashboard Vercel, klik "Add New" → "Project" → pilih repository GitHub Anda → klik "Deploy".',
-                  detail: 'Vercel otomatis mendeteksi Next.js. Tidak perlu setting apapun. Tunggu ± 1-2 menit.',
-                },
-                {
-                  step: 5,
-                  title: 'Selesai! Website Live',
-                  desc: 'Vercel akan memberikan URL gratis seperti akademidigital.vercel.app. Custom domain juga bisa ditambahkan gratis.',
-                  detail: 'Setiap kali Anda push ke GitHub, Vercel otomatis redeploy. Sangat mudah!',
-                },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.step}
-                  variants={fadeUp}
-                  custom={i}
-                >
-                  <Card className="p-1">
-                    <CardContent className="p-6 sm:p-8">
-                      <div className="flex items-start gap-5 sm:gap-6">
-                        <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/25">
-                          <span className="text-2xl sm:text-3xl font-black text-white">{item.step}</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-xl sm:text-2xl font-bold mb-2">{item.title}</h3>
-                          <p className="text-lg text-muted-foreground leading-relaxed mb-3">{item.desc}</p>
-                          <div className="flex items-start gap-2 px-4 py-3 rounded-lg bg-muted/60 border">
-                            <CheckCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                            <p className="text-base text-muted-foreground">{item.detail}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Quick command reference */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={fadeUp}
-              custom={5}
-              className="mt-12"
-            >
-              <Card className="border-emerald-200 bg-emerald-50/30 p-1">
-                <CardContent className="p-6 sm:p-8">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Code2 className="w-7 h-7 text-emerald-600" />
-                    <h3 className="text-xl font-bold">Quick Command Reference</h3>
-                  </div>
-                  <div className="relative">
-                    <CopyButton text={`# 1. Inisialisasi git
-git init
-git add .
-git commit -m "initial commit"
-
-# 2. Buat repo di github.com, lalu:
-git remote add origin https://github.com/USERNAME/NAMA-REPO.git
-git branch -M main
-git push -u origin main
-
-# 3. Buka vercel.com → Import project → Deploy!
-# Selesai! Website live di https://nama-repo.vercel.app`} />
-                    <SyntaxHighlighter
-                      language="bash"
-                      style={oneDark}
-                      customStyle={{
-                        borderRadius: '0.75rem',
-                        fontSize: '0.95rem',
-                        lineHeight: '1.8',
-                        padding: '1.5rem',
-                        margin: 0,
-                      }}
-                      wrapLongLines
-                    >
-{`# 1. Inisialisasi git
-git init
-git add .
-git commit -m "initial commit"
-
-# 2. Buat repo di github.com, lalu:
-git remote add origin https://github.com/USERNAME/NAMA-REPO.git
-git branch -M main
-git push -u origin main
-
-# 3. Buka vercel.com → Import project → Deploy!
-# Selesai! Website live di https://nama-repo.vercel.app`}
-                    </SyntaxHighlighter>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── Contact Section ───────────────────────────── */}
-        <section id="kontak" className="py-24 sm:py-32 px-6 sm:px-10">
-          <div className="mx-auto max-w-3xl">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={stagger}
-              className="text-center mb-16"
-            >
-              <motion.h2
-                variants={fadeUp}
-                custom={0}
-                className="text-4xl sm:text-5xl font-black tracking-tight"
-              >
-                Siap Memulai Proyek?
-              </motion.h2>
-              <motion.p
-                variants={fadeUp}
-                custom={1}
-                className="mt-4 text-xl sm:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium"
-              >
-                Hubungi kami dan jelaskan kebutuhan Anda. Kami akan merespons dalam 24 jam.
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              variants={fadeUp}
-              custom={0}
-            >
-              <Card className="p-2">
-                <CardContent className="pt-10">
-                  <form onSubmit={handleContactSubmit} className="space-y-6">
-                    <div className="space-y-2.5">
-                      <Label htmlFor="contact-nama" className="text-lg font-semibold">Nama</Label>
-                      <Input
-                        id="contact-nama"
-                        placeholder="Nama Anda"
-                        value={contactNama}
-                        onChange={(e) => setContactNama(e.target.value)}
-                        className="h-14 text-lg"
-                      />
-                    </div>
-                    <div className="space-y-2.5">
-                      <Label htmlFor="contact-email" className="text-lg font-semibold">Email</Label>
-                      <Input
-                        id="contact-email"
-                        type="email"
-                        placeholder="email@anda.com"
-                        value={contactEmail}
-                        onChange={(e) => setContactEmail(e.target.value)}
-                        className="h-14 text-lg"
-                      />
-                    </div>
-                    <div className="space-y-2.5">
-                      <Label htmlFor="contact-desc" className="text-lg font-semibold">Deskripsi Kebutuhan</Label>
-                      <Textarea
-                        id="contact-desc"
-                        placeholder="Jelaskan aplikasi yang Anda inginkan..."
-                        rows={5}
-                        value={contactDesc}
-                        onChange={(e) => setContactDesc(e.target.value)}
-                        className="text-lg"
-                      />
-                    </div>
-                    <Button type="submit" className="w-full text-lg py-7 font-bold" disabled={contactLoading}>
-                      {contactLoading ? 'Mengirim...' : 'Kirim Pesan'}
-                      {!contactLoading && <Send className="ml-2 h-6 w-6" />}
-                    </Button>
-                  </form>
-
-                  {/* WhatsApp Contact */}
-                  <div className="mt-12 pt-10 border-t">
-                    <p className="text-xl text-muted-foreground mb-5 text-center font-medium">
-                      Atau hubungi langsung via WhatsApp
-                    </p>
-                    <div className="flex justify-center">
-                      <a
-                        href="https://wa.me/6281234567890"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-3 px-10 py-5 rounded-xl bg-green-600 text-white font-bold text-xl hover:bg-green-700 transition-colors shadow-lg shadow-green-600/25"
-                      >
-                        <MessageCircle className="w-7 h-7" />
-                        +62 812-3456-7890
-                      </a>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ── CTA Section ──────────────────────────────── */}
-        <section className="py-24 sm:py-32 px-6 sm:px-10 bg-gradient-to-b from-muted/50 to-background">
+      {/* ─── Fitur / Layanan ────────────────────────── */}
+      <section id="layanan" className="py-16 md:py-20 bg-white">
+        <div className="mx-auto max-w-5xl px-4">
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={stagger}
-            className="mx-auto max-w-4xl text-center"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+            className="text-center mb-10"
           >
-            <motion.h2 variants={fadeUp} custom={0} className="text-4xl sm:text-5xl md:text-6xl font-black text-foreground mb-6">
-              Siap Bangun Aplikasi Anda?
+            <motion.h2 variants={fadeUp} custom={0} className="text-2xl font-bold md:text-3xl">
+              Kenapa Pilih Kami?
             </motion.h2>
-            <motion.p variants={fadeUp} custom={1} className="text-xl sm:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto font-medium">
-              Mulai dari Rp 250.000 saja. Deploy gratis ke Vercel, database gratis pakai Google Sheets. Tanpa biaya server bulanan!
+            <motion.p variants={fadeUp} custom={1} className="mt-2 text-gray-500">
+              Solusi website paling simpel dan efisien untuk bisnis Anda
             </motion.p>
-            <motion.div variants={fadeUp} custom={2} className="flex flex-col sm:flex-row items-center justify-center gap-5">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto text-xl px-12 py-8 font-bold shadow-lg shadow-emerald-600/20"
-                onClick={() => scrollTo('#kontak')}
-              >
-                <Zap className="mr-2 h-6 w-6" />
-                Mulai Sekarang
-                <ArrowRight className="ml-2 h-6 w-6" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto text-xl px-12 py-8 font-bold"
-                onClick={() => scrollTo('#harga')}
-              >
-                Lihat Harga
-              </Button>
-            </motion.div>
           </motion.div>
-        </section>
-      </main>
 
-      {/* ── Footer ──────────────────────────────────────── */}
-      <footer className="border-t py-12 px-6 sm:px-10 bg-background">
-        <div className="mx-auto max-w-[90rem] flex flex-col sm:flex-row items-center justify-between gap-6 text-lg text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()}{' '}
-            <span className="font-bold text-foreground">AkademiDigital</span>. Semua hak dilindungi.
-          </p>
-          <div className="flex items-center gap-5">
-            <a
-              href="https://akademipelajar.my.id"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors font-medium"
-            >
-              AkademiPelajar.my.id
-            </a>
-            <span className="text-border">|</span>
-            <a
-              href="https://tabungan.akademipelajar.my.id"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors font-medium"
-            >
-              Tabungan.AkademiPelajar.my.id
-            </a>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {fiturList.map((f, i) => (
+              <motion.div key={f.title} variants={fadeUp} custom={i}>
+                <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full">
+                  <CardHeader className="pb-3">
+                    <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                      <f.icon className="h-5 w-5" />
+                    </div>
+                    <CardTitle className="text-base font-semibold">{f.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-500">{f.desc}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Cara Kerja ─────────────────────────────── */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold md:text-3xl">Cara Kerja</h2>
+            <p className="mt-2 text-gray-500">3 langkah simpel, website Anda langsung live</p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              { step: '01', title: 'Konsultasi', desc: 'Ceritakan kebutuhan bisnis Anda via WhatsApp. Kami bantu tentukan paket terbaik.' },
+              { step: '02', title: 'Desain & Build', desc: 'Kami desain dan bangun website sesuai kebutuhan. Preview dikirim untuk approval.' },
+              { step: '03', title: 'Live!', desc: 'Website Anda online di Vercel. Tinggal pakai dan terima order!' },
+            ].map((item) => (
+              <div key={item.step} className="text-center">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-lg">
+                  {item.step}
+                </div>
+                <h3 className="font-semibold text-lg">{item.title}</h3>
+                <p className="mt-1 text-sm text-gray-500">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
+
+      {/* ─── Harga ──────────────────────────────────── */}
+      <section id="harga" className="py-16 md:py-20 bg-white">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold md:text-3xl">Paket Harga</h2>
+            <p className="mt-2 text-gray-500">Pilih paket yang sesuai kebutuhan bisnis Anda</p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {hargaList.map((pkg) => (
+              <Card
+                key={pkg.name}
+                className={`relative flex flex-col border ${
+                  pkg.popular
+                    ? 'border-emerald-500 shadow-lg ring-1 ring-emerald-500'
+                    : 'border-gray-100 shadow-sm'
+                }`}
+              >
+                {pkg.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="rounded-full bg-emerald-600 px-3 py-0.5 text-xs font-semibold text-white">
+                      Paling Populer
+                    </span>
+                  </div>
+                )}
+                <CardHeader className="text-center pb-2">
+                  <CardTitle className="text-lg">{pkg.name}</CardTitle>
+                  <p className="text-sm text-gray-400">{pkg.desc}</p>
+                  <div className="mt-3">
+                    <span className="text-3xl font-extrabold">Rp {pkg.price}</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-1">
+                  <ul className="space-y-2">
+                    {pkg.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <a href="#kontak" className="w-full">
+                    <Button
+                      className={`w-full ${
+                        pkg.popular
+                          ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                          : 'border-gray-300 hover:bg-gray-50'
+                      }`}
+                      variant={pkg.popular ? 'default' : 'outline'}
+                    >
+                      Pilih {pkg.name}
+                    </Button>
+                  </a>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ────────────────────────────────────── */}
+      <section id="faq" className="py-16 md:py-20 bg-gray-50">
+        <div className="mx-auto max-w-3xl px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold md:text-3xl">Pertanyaan Umum</h2>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full">
+            {faqList.map((item, i) => (
+              <AccordionItem key={i} value={`faq-${i}`}>
+                <AccordionTrigger className="text-left text-sm font-medium">
+                  {item.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-sm text-gray-500 leading-relaxed">
+                  {item.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
+
+      {/* ─── CTA / Kontak ───────────────────────────── */}
+      <section id="kontak" className="py-16 md:py-20 bg-white">
+        <div className="mx-auto max-w-lg px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold md:text-3xl">Siap Memulai?</h2>
+            <p className="mt-2 text-gray-500">
+              Hubungi kami sekarang dan dapatkan konsultasi gratis!
+            </p>
+          </div>
+
+          <Card className="border border-gray-100 shadow-sm">
+            <CardContent className="pt-6">
+              <form onSubmit={handleContact} className="space-y-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium">Nama</label>
+                  <Input name="nama" placeholder="Nama lengkap Anda" required className="border-gray-200" />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">Email</label>
+                  <Input name="email" type="email" placeholder="email@anda.com" required className="border-gray-200" />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">Pesan</label>
+                  <Textarea
+                    name="deskripsi"
+                    placeholder="Ceritakan kebutuhan website Anda..."
+                    required
+                    rows={4}
+                    className="border-gray-200"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white gap-2"
+                >
+                  {submitting ? 'Mengirim...' : (
+                    <>
+                      Kirim Pesan <Send className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          <p className="mt-4 text-center text-sm text-gray-400">
+            Atau hubungi langsung via{' '}
+            <a href="https://wa.me/62" className="font-medium text-emerald-600 hover:underline">
+              WhatsApp
+            </a>
+          </p>
+        </div>
+      </section>
+
+      {/* ─── Footer ─────────────────────────────────── */}
+      <footer className="border-t border-gray-100 bg-gray-50">
+        <div className="mx-auto max-w-5xl px-4 py-8 text-center text-sm text-gray-400">
+          <p className="font-semibold text-gray-600">AkademiDigital</p>
+          <p className="mt-1">Jasa pembuatan website profesional dengan Google Sheets backend.</p>
+          <p className="mt-3">© {new Date().getFullYear()} AkademiDigital. All rights reserved.</p>
+        </div>
       </footer>
+
+      <Toaster richColors position="top-center" />
     </div>
   )
 }
