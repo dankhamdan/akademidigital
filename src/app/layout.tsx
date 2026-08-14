@@ -32,7 +32,8 @@ export const metadata: Metadata = {
     title: "Aplikasi Web Siap Pakai + Google Sheets — ProdukDigital",
     description:
       "4 aplikasi web berbasis GAS: Zakat, Tabungan Sekolah, Sikurban & Kas Masjid. Source code + panduan deploy. Bayar sekali, pakai selamanya.",
-    url: "https://produkdigital.vercel.app",
+    url: "https://produkdigitall.my.id",
+    metadataBase: new URL("https://produkdigitall.my.id"),
     siteName: "ProdukDigital",
     type: "website",
   },
