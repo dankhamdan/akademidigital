@@ -5,22 +5,28 @@ import { motion } from 'framer-motion'
 import {
   ArrowRight,
   Check,
+  Code2,
   Globe,
   Zap,
   Shield,
-  Code2,
-  Server,
+  Smartphone,
+  BookOpen,
+  Download,
+  Copy,
+  Star,
   Send,
   Menu,
   Layers,
+  FileSpreadsheet,
+  Server,
   ExternalLink,
+  ChevronRight,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -53,110 +59,112 @@ const fadeUp = {
 // ─── Data ─────────────────────────────────────────────────────
 const navLinks = [
   { label: 'Fitur', href: '#fitur' },
-  { label: 'Teknologi', href: '#teknologi' },
+  { label: 'Isi Paket', href: '#paket' },
   { label: 'Harga', href: '#harga' },
   { label: 'FAQ', href: '#faq' },
 ]
 
-const featureTabs = [
+const masalahList = [
+  'Punya bisnis tapi belum punya website?',
+  'Mau bikin website tapi nggak bisa coding?',
+  'Bayar developer mahal untuk website sederhana?',
+  'Hosting & database terus menguras biaya?',
+  'Punya website tapi susah update kontennya?',
+]
+
+const fiturList = [
   {
-    id: 'frontend',
-    label: 'Frontend',
-    icon: Layers,
-    title: 'Antarmuka Modern',
-    desc: 'Website dibangun dengan Next.js + Tailwind CSS — framework terpopuler untuk web modern. Desain responsif, cepat, dan SEO friendly.',
-    points: ['Next.js 16 App Router', 'Tailwind CSS 4', 'shadcn/ui Components', 'Framer Motion Animasi'],
-  },
-  {
-    id: 'backend',
-    label: 'Backend',
-    icon: Server,
-    title: 'Tanpa Server Rumit',
-    desc: 'Data tersimpan otomatis di Google Sheets. Nggak perlu belajar database, nggak perlu bayar server tambahan.',
-    points: ['Google Sheets sebagai database', 'Google Apps Script API', 'Auto-sync real-time', 'Dashboard spreadsheet bawaan'],
-  },
-  {
-    id: 'deploy',
-    label: 'Deploy',
     icon: Globe,
-    title: 'Hosting Enterprise Gratis',
-    desc: 'Deploy di Vercel — platform yang sama dipakai oleh perusahaan besar. CDN global, SSL gratis, auto-scaling.',
-    points: ['Vercel Edge Network', 'SSL & CDN gratis', 'Auto-deploy dari Git', '99.9% uptime guarantee'],
+    title: 'Website Responsif',
+    desc: 'Tampilan sempurna di semua device — HP, tablet, laptop. Tanpa perlu coding.',
+  },
+  {
+    icon: FileSpreadsheet,
+    title: 'Google Sheets Backend',
+    desc: 'Data langsung tersimpan di Google Sheets. Dikelola seperti Excel biasa.',
+  },
+  {
+    icon: Server,
+    title: 'Hosting Gratis Vercel',
+    desc: 'Deploy gratis, SSL gratis, CDN global. Nggak perlu bayar server.',
+  },
+  {
+    icon: Shield,
+    title: 'Aman & Stabil',
+    desc: 'Infrastruktur Vercel enterprise-grade dengan uptime 99.9%.',
+  },
+  {
+    icon: Zap,
+    title: 'Mudah Dipasang',
+    desc: 'Ikuti panduan step-by-step. Dari nol sampai live dalam 30 menit.',
+  },
+  {
+    icon: Smartphone,
+    title: 'SEO Friendly',
+    desc: 'Optimasi mesin pencari bawaan, website mudah ditemukan di Google.',
   },
 ]
 
-const stats = [
-  { value: '24 Jam', label: 'Website Jadi' },
-  { value: '0 Rp', label: 'Biaya Server' },
-  { value: '99.9%', label: 'Uptime' },
-  { value: '100+', label: 'Website Dibuat' },
+const isiPaket = [
+  {
+    icon: Code2,
+    title: 'Source Code Lengkap',
+    desc: 'Semua file source code website (Next.js + Tailwind CSS). Siap dimodifikasi sesuai kebutuhan.',
+  },
+  {
+    icon: BookOpen,
+    title: 'Panduan Deploy',
+    desc: 'eBook panduan lengkap deploy ke Vercel — langkah demi langkah dengan screenshot.',
+  },
+  {
+    icon: FileSpreadsheet,
+    title: 'Template Google Sheets',
+    desc: 'File Google Apps Script + template spreadsheet yang langsung bisa dipakai.',
+  },
+  {
+    icon: Download,
+    title: 'Update Gratis',
+    desc: 'Mendapat akses update source code terbaru selama 6 bulan.',
+  },
 ]
 
-const hargaList = [
-  {
-    name: 'Starter',
-    price: '299K',
-    period: '/project',
-    desc: 'Mulai bisnis online dengan landing page profesional.',
-    features: [
-      '1 halaman landing page',
-      'Desain responsif modern',
-      'Hosting Vercel (1 tahun)',
-      'Domain .vercel.app',
-      'Revisi 2x',
-    ],
-    cta: 'Mulai Starter',
-    popular: false,
-  },
-  {
-    name: 'Business',
-    price: '599K',
-    period: '/project',
-    desc: 'Website lengkap dengan Google Sheets backend.',
-    features: [
-      '3 halaman website',
-      'Desain premium + animasi',
-      'Hosting Vercel (1 tahun)',
-      'Google Sheets backend',
-      'Form kontak & WhatsApp',
-      'Revisi 5x',
-      'Support 1 bulan',
-    ],
-    cta: 'Pilih Business',
-    popular: true,
-  },
-  {
-    name: 'Enterprise',
-    price: '999K',
-    period: '/project',
-    desc: 'Solusi lengkap untuk bisnis yang berkembang pesat.',
-    features: [
-      '5+ halaman website',
-      'Custom design system',
-      'Google Sheets backend',
-      'Admin dashboard',
-      'Domain custom gratis',
-      'Revisi unlimited',
-      'Support 3 bulan',
-      'SEO & Analytics',
-    ],
-    cta: 'Go Enterprise',
-    popular: false,
-  },
+const techStack = [
+  { name: 'Next.js', desc: 'React Framework' },
+  { name: 'Tailwind CSS', desc: 'Utility CSS' },
+  { name: 'Google Apps Script', desc: 'Backend' },
+  { name: 'Vercel', desc: 'Hosting' },
 ]
 
 const faqList = [
-  { q: 'Apa bedanya dengan website biasa?', a: 'Website kami menggunakan Google Sheets sebagai backend, artinya data pengunjung, form kontak, dan pesanan langsung tersimpan di spreadsheet yang Anda kelola sendiri. Tanpa CMS rumit, tanpa biaya server.' },
-  { q: 'Saya tidak paham teknologi, apakah bisa?', a: 'Tentu! Anda tidak perlu paham coding sama sekali. Kami tangani semua teknis — dari desain, development, deploy, sampai maintenance. Anda fokus ke konten dan bisnis saja.' },
-  { q: 'Hosting benar-benar gratis?', a: 'Ya! Vercel menyediakan hosting gratis untuk website Next.js. Domain .vercel.app gratis selamanya. Kalau mau domain custom (misal bisnisanda.com), biaya domain mulai dari 100K/tahun.' },
-  { q: 'Bagaimana cara kerja Google Sheets backend?', a: 'Kami setup Google Apps Script yang terhubung ke spreadsheet Anda. Setiap ada pengunjung isi form di website, datanya langsung muncul di Google Sheets. Anda bisa akses, filter, dan export data kapan saja.' },
-  { q: 'Berapa lama proses pengerjaan?', a: 'Starter: 1-2 hari kerja. Business: 3-5 hari kerja. Enterprise: 5-7 hari kerja. Setelah desain di-approve, pengerjaan dimulai segera.' },
+  {
+    q: 'Saya tidak bisa coding, apakah bisa pakai ini?',
+    a: 'Bisa! Panduan deploy kami buat step-by-step dengan screenshot. Anda hanya perlu ikuti langkahnya. Kalau stuck, kami bantu via WhatsApp.',
+  },
+  {
+    q: 'Apa bedanya pakai Google Sheets dibanding database biasa?',
+    a: 'Google Sheets gratis, familiar (kaya Excel), bisa diakses dari mana saja, dan nggak perlu setup database server. Cocok untuk website dengan traffic menengah.',
+  },
+  {
+    q: 'Hosting benar-benar gratis selamanya?',
+    a: 'Vercel menyediakan hosting gratis (Hobby Plan) yang cukup untuk website personal dan bisnis kecil. Unlimited bandwidth, SSL gratis, domain .vercel.app gratis.',
+  },
+  {
+    q: 'Bisa dipakai untuk berapa website?',
+    a: '1 lisensi untuk 1 website. Kalau mau dipakai untuk multiple website/domain, bisa hubungi kami untuk paket lisensi tambahan dengan harga spesial.',
+  },
+  {
+    q: 'Bisa custom tampilan dan fiturnya?',
+    a: 'Tentu! Karena Anda dapat source code, Anda bisa modif sesuka hati. Atau kalau mau kami yang customkan, ada layanan tambahan dengan biaya terpisah.',
+  },
+  {
+    q: 'Support sampai kapan?',
+    a: 'Kami berikan support WhatsApp selama 6 bulan untuk pertanyaan seputar deploy dan penggunaan. Update source code juga gratis selama 6 bulan.',
+  },
 ]
 
 // ─── Component ────────────────────────────────────────────────
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState('frontend')
   const [submitting, setSubmitting] = useState(false)
 
   const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -196,7 +204,6 @@ export default function Home() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white font-bold text-sm">AD</div>
             <span className="text-lg font-bold tracking-tight">AkademiDigital</span>
           </div>
-
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) => (
               <a key={l.href} href={l.href} className="rounded-md px-3 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900">
@@ -204,18 +211,15 @@ export default function Home() {
               </a>
             ))}
           </nav>
-
           <div className="flex items-center gap-3">
-            <a href="#kontak" className="hidden md:block">
+            <a href="#harga" className="hidden md:block">
               <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full px-5">
-                Pesan Sekarang
+                Beli Sekarang
               </Button>
             </a>
             <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-5 w-5" />
-                </Button>
+                <Button variant="ghost" size="icon"><Menu className="h-5 w-5" /></Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-72">
                 <SheetTitle className="flex items-center gap-2">
@@ -228,8 +232,8 @@ export default function Home() {
                       {l.label}
                     </a>
                   ))}
-                  <a href="#kontak" onClick={() => setMenuOpen(false)} className="mt-3">
-                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">Pesan Sekarang</Button>
+                  <a href="#harga" onClick={() => setMenuOpen(false)} className="mt-3">
+                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">Beli Sekarang</Button>
                   </a>
                 </nav>
               </SheetContent>
@@ -238,86 +242,102 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ─── Hero (Split) ───────────────────────────── */}
+      {/* ─── Hero ───────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-gray-100">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-emerald-50/80 via-teal-50/40 to-transparent" />
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-16 md:py-24 md:grid-cols-2 md:items-center">
+        <div className="relative mx-auto grid max-w-6xl gap-12 px-5 py-16 md:py-24 md:grid-cols-2 md:items-center">
           <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.08 } } }}>
             <motion.div variants={fadeUp} custom={0}>
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
-                <Zap className="h-3 w-3" /> Next.js + Google Sheets
+                <Download className="h-3 w-3" /> Source Code + Panduan
               </div>
             </motion.div>
-            <motion.h1 variants={fadeUp} custom={1} className="mt-5 text-3xl font-extrabold leading-[1.15] tracking-tight md:text-4xl lg:text-5xl">
-              Bikin Website Profesional,
+            <motion.h1 variants={fadeUp} custom={1} className="mt-5 text-3xl font-extrabold leading-[1.15] tracking-tight md:text-4xl lg:text-[2.8rem]">
+              Template Website +
               <br />
               <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                Tanpa Ribet Server
+                Google Sheets Backend
               </span>
             </motion.h1>
             <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-lg text-base leading-relaxed text-gray-500">
-              Kami bangun website modern dengan <strong className="text-gray-700">Next.js</strong> yang data-nya langsung nyambung ke <strong className="text-gray-700">Google Sheets</strong> Anda. Deploy gratis di Vercel, tanpa server, tanpa database rumit.
+              Dapatkan source code website profesional dengan backend Google Apps Script. Deploy gratis di Vercel, data tersimpan di Google Sheets. Tanpa server, tanpa database mahal.
             </motion.p>
             <motion.div variants={fadeUp} custom={3} className="mt-8 flex flex-wrap gap-3">
               <a href="#harga">
-                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full gap-2 px-6">
-                  Lihat Harga <ArrowRight className="h-4 w-4" />
+                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full gap-2 px-6 shadow-lg shadow-emerald-200">
+                  Beli Sekarang <ArrowRight className="h-4 w-4" />
                 </Button>
               </a>
               <a href="#fitur">
                 <Button size="lg" variant="outline" className="rounded-full px-6 border-gray-200">
-                  Lihat Fitur
+                  Lihat Detail
                 </Button>
               </a>
             </motion.div>
+            <motion.div variants={fadeUp} custom={4} className="mt-6 flex flex-wrap items-center gap-4 text-xs text-gray-400">
+              <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-500" /> Source code lengkap</span>
+              <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-500" /> Panduan deploy</span>
+              <span className="flex items-center gap-1"><Check className="h-3 w-3 text-emerald-500" /> Support 6 bulan</span>
+            </motion.div>
           </motion.div>
 
-          {/* Hero visual */}
+          {/* Hero mockup */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
             className="hidden md:block"
           >
-            <div className="relative rounded-2xl border border-gray-200 bg-gray-50 p-4 shadow-xl shadow-emerald-100/30">
+            <div className="relative rounded-2xl border border-gray-200 bg-gray-50 p-3 shadow-2xl shadow-emerald-100/40">
               <div className="rounded-xl bg-white border border-gray-100 overflow-hidden">
-                {/* Mock browser bar */}
                 <div className="flex items-center gap-1.5 border-b border-gray-100 px-4 py-2.5">
                   <div className="h-2.5 w-2.5 rounded-full bg-red-400" />
                   <div className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
                   <div className="h-2.5 w-2.5 rounded-full bg-green-400" />
-                  <div className="ml-3 flex-1 rounded-md bg-gray-100 px-3 py-1 text-xs text-gray-400">
-                    akademidigital.vercel.app
-                  </div>
+                  <div className="ml-3 flex-1 rounded-md bg-gray-100 px-3 py-1 text-xs text-gray-400">websiteanda.vercel.app</div>
                 </div>
-                {/* Mock content */}
                 <div className="p-6 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 text-xs font-bold">A</div>
-                    <div>
-                      <div className="h-2.5 w-24 rounded bg-gray-200" />
-                      <div className="mt-1 h-2 w-16 rounded bg-gray-100" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 text-xs font-bold">W</div>
+                      <div><div className="h-2.5 w-20 rounded bg-gray-200" /></div>
                     </div>
+                    <div className="h-7 w-20 rounded-full bg-emerald-600" />
                   </div>
                   <div className="mt-4 space-y-2">
                     <div className="h-3 w-3/4 rounded bg-gray-200" />
                     <div className="h-3 w-1/2 rounded bg-gray-100" />
                   </div>
-                  <div className="mt-4 grid grid-cols-2 gap-2">
-                    <div className="h-16 rounded-lg bg-emerald-50 border border-emerald-100" />
-                    <div className="h-16 rounded-lg bg-teal-50 border border-teal-100" />
+                  <div className="mt-5 grid grid-cols-3 gap-2">
+                    {[1, 2, 3].map((n) => (
+                      <div key={n} className="h-20 rounded-lg bg-emerald-50 border border-emerald-100 flex flex-col items-center justify-center gap-1">
+                        <div className="h-4 w-4 rounded bg-emerald-200" />
+                        <div className="h-2 w-10 rounded bg-emerald-100" />
+                      </div>
+                    ))}
                   </div>
-                  <div className="mt-3 flex gap-2">
-                    <div className="h-7 w-20 rounded-full bg-emerald-600" />
-                    <div className="h-7 w-20 rounded-full border border-gray-200" />
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-gray-50 border border-gray-100 p-3 space-y-2">
+                      <div className="h-2 w-16 rounded bg-gray-200" />
+                      <div className="h-8 w-full rounded bg-emerald-100" />
+                    </div>
+                    <div className="rounded-lg bg-gray-50 border border-gray-100 p-3 space-y-2">
+                      <div className="h-2 w-16 rounded bg-gray-200" />
+                      <div className="h-8 w-full rounded bg-emerald-100" />
+                    </div>
                   </div>
                 </div>
               </div>
-              {/* Floating badge */}
               <div className="absolute -bottom-3 -right-3 rounded-xl border border-white bg-white px-3 py-2 shadow-lg">
                 <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-green-500" />
-                  <span className="text-xs font-medium text-gray-700">Deployed on Vercel</span>
+                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-xs font-medium text-gray-700">Live on Vercel</span>
+                </div>
+              </div>
+              <div className="absolute -top-2 -left-2 rounded-lg border border-white bg-white px-2.5 py-1.5 shadow-md">
+                <div className="flex items-center gap-1.5">
+                  <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-500" />
+                  <span className="text-[10px] font-medium text-gray-600">Google Sheets Synced</span>
                 </div>
               </div>
             </div>
@@ -325,191 +345,188 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── Stats Bar ───────────────────────────────── */}
+      {/* ─── Pain Points ─────────────────────────────── */}
       <section className="border-b border-gray-100 bg-gray-50/50">
-        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 px-5 py-10 md:grid-cols-4">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={i}
-              className="text-center"
-            >
-              <div className="text-2xl font-extrabold text-emerald-600 md:text-3xl">{s.value}</div>
-              <div className="mt-0.5 text-sm text-gray-500">{s.label}</div>
+        <div className="mx-auto max-w-3xl px-5 py-12 md:py-16 text-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.06 } } }}>
+            <motion.p variants={fadeUp} custom={0} className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Kenapa Anda Butuh Ini?</motion.p>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-2 text-2xl font-bold md:text-3xl">Pernah Mengalami Ini?</motion.h2>
+            <motion.div variants={fadeUp} custom={2} className="mt-8 space-y-3">
+              {masalahList.map((m) => (
+                <div key={m} className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-left text-sm text-gray-600">
+                  <div className="text-lg">😅</div>
+                  {m}
+                </div>
+              ))}
             </motion.div>
-          ))}
+            <motion.div variants={fadeUp} custom={3} className="mt-8">
+              <p className="text-gray-500">
+                Template ini <strong className="text-gray-700">menyelesaikan semua masalah di atas</strong>.
+              </p>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* ─── Fitur (Tabbed) ──────────────────────────── */}
+      {/* ─── Fitur ───────────────────────────────────── */}
       <section id="fitur" className="py-16 md:py-20">
         <div className="mx-auto max-w-5xl px-5">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold md:text-3xl">Teknologi yang Kami Gunakan</h2>
-            <p className="mt-2 text-gray-500">Stack modern yang terbukti handal dan scalable</p>
+            <p className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Fitur Lengkap</p>
+            <h2 className="mt-2 text-2xl font-bold md:text-3xl">Apa yang Anda Dapatkan?</h2>
           </div>
 
-          {/* Tabs */}
-          <div className="mb-8 flex justify-center gap-2 flex-wrap">
-            {featureTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-                  activeTab === tab.id
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <tab.icon className="h-4 w-4" />
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Tab content */}
-          <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-            {featureTabs.filter((t) => t.id === activeTab).map((tab) => (
-              <div className="grid gap-8 md:grid-cols-2 items-center">
-                <div>
-                  <h3 className="text-xl font-bold">{tab.title}</h3>
-                  <p className="mt-2 text-gray-500 leading-relaxed">{tab.desc}</p>
-                  <ul className="mt-4 space-y-2.5">
-                    {tab.points.map((p) => (
-                      <li key={p} className="flex items-center gap-2.5 text-sm">
-                        <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                          <Check className="h-3 w-3 text-emerald-600" />
-                        </div>
-                        <span className="text-gray-700">{p}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="flex items-center justify-center">
-                  <div className="relative w-full max-w-xs aspect-square rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-50 border border-emerald-200/50 flex items-center justify-center">
-                    <tab.icon className="h-20 w-20 text-emerald-600/70" strokeWidth={1.2} />
-                    <div className="absolute -top-2 -left-2 h-8 w-8 rounded-full bg-emerald-500/20" />
-                    <div className="absolute -bottom-3 -right-3 h-12 w-12 rounded-full bg-teal-500/15" />
-                  </div>
-                </div>
-              </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {fiturList.map((f, i) => (
+              <motion.div key={f.title} variants={fadeUp} custom={i}>
+                <Card className="rounded-xl border-gray-200 hover:shadow-md transition-shadow h-full">
+                  <CardHeader className="pb-2">
+                    <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                      <f.icon className="h-5 w-5" />
+                    </div>
+                    <CardTitle className="text-base font-semibold">{f.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* ─── Cara Kerja (Timeline) ───────────────────── */}
-      <section id="teknologi" className="py-16 md:py-20 bg-gray-50 border-y border-gray-100">
-        <div className="mx-auto max-w-3xl px-5">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl font-bold md:text-3xl">Bagaimana Prosesnya?</h2>
-            <p className="mt-2 text-gray-500">Tiga langkah simpel dari konsultasi sampai website live</p>
-          </div>
-
-          <div className="relative">
-            {/* Vertical line */}
-            <div className="absolute left-5 top-3 bottom-3 w-0.5 bg-emerald-200 md:left-1/2 md:-translate-x-px" />
-
-            {[
-              { num: '1', title: 'Konsultasi Gratis', desc: 'Ceritakan kebutuhan bisnis Anda. Kami bantu pilih paket terbaik dan diskusi desain yang diinginkan.', side: 'left' },
-              { num: '2', title: 'Desain & Development', desc: 'Kami mulai bangun website Anda. Preview dikirim berkala untuk feedback dan approval.', side: 'right' },
-              { num: '3', title: 'Website Live!', desc: 'Setelah disetujui, website langsung deploy ke Vercel. Anda terima link dan mulai pakai!', side: 'left' },
-            ].map((item) => (
-              <motion.div
-                key={item.num}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-40px' }}
-                variants={fadeUp}
-                custom={parseInt(item.num)}
-                className={`relative mb-10 last:mb-0 flex items-start gap-5 md:gap-0 ${
-                  item.side === 'right' ? 'md:flex-row-reverse' : ''
-                }`}
-              >
-                {/* Dot */}
-                <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-sm shadow-md md:absolute md:left-1/2 md:-translate-x-1/2">
-                  {item.num}
-                </div>
-                {/* Content */}
-                <div className="flex-1 md:w-[calc(50%-3rem)] md:px-8">
-                  <h3 className="font-semibold text-lg">{item.title}</h3>
-                  <p className="mt-1 text-sm text-gray-500 leading-relaxed">{item.desc}</p>
-                </div>
-              </motion.div>
+      {/* ─── Tech Stack ──────────────────────────────── */}
+      <section className="py-12 bg-gray-50 border-y border-gray-100">
+        <div className="mx-auto max-w-3xl px-5 text-center">
+          <p className="text-sm text-gray-400 mb-6">Dibangun dengan teknologi terpopuler</p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {techStack.map((t) => (
+              <div key={t.name} className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm">
+                <span className="font-medium text-gray-700">{t.name}</span>
+                <span className="ml-1.5 text-xs text-gray-400">{t.desc}</span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Harga ──────────────────────────────────── */}
-      <section id="harga" className="py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-5">
+      {/* ─── Isi Paket ──────────────────────────────── */}
+      <section id="paket" className="py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-5">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold md:text-3xl">Pilih Paket Anda</h2>
-            <p className="mt-2 text-gray-500">Harga transparan, tanpa biaya tersembunyi</p>
+            <p className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Isi Paket</p>
+            <h2 className="mt-2 text-2xl font-bold md:text-3xl">Ajaib — 4 Item yang Anda Dapatkan</h2>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-3 items-start">
-            {hargaList.map((pkg) => (
-              <motion.div
-                key={pkg.name}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                custom={hargaList.indexOf(pkg)}
-              >
-                <Card className={`relative flex flex-col rounded-2xl ${
-                  pkg.popular
-                    ? 'border-2 border-emerald-500 shadow-xl shadow-emerald-100/40'
-                    : 'border border-gray-200'
-                }`}>
-                  {pkg.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="rounded-full bg-emerald-600 px-4 py-1 text-xs font-semibold text-white shadow-sm">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
-                  <CardHeader className="pb-3 pt-6 text-center">
-                    <CardTitle className="text-lg font-semibold">{pkg.name}</CardTitle>
-                    <p className="text-sm text-gray-400">{pkg.desc}</p>
-                    <div className="mt-4 flex items-baseline justify-center gap-1">
-                      <span className="text-sm text-gray-400">Rp</span>
-                      <span className="text-4xl font-extrabold tracking-tight">{pkg.price}</span>
-                      <span className="text-sm text-gray-400">{pkg.period}</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex-1 px-6">
-                    <ul className="space-y-2.5">
-                      {pkg.features.map((f) => (
-                        <li key={f} className="flex items-start gap-2.5 text-sm text-gray-600">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter className="px-6 pb-6 pt-2">
-                    <a href="#kontak" className="w-full">
-                      <Button
-                        className={`w-full rounded-full py-5 font-medium ${
-                          pkg.popular
-                            ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md'
-                            : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
-                        }`}
-                        variant={pkg.popular ? 'default' : 'secondary'}
-                      >
-                        {pkg.cta}
-                      </Button>
-                    </a>
-                  </CardFooter>
-                </Card>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+            className="grid gap-5 sm:grid-cols-2"
+          >
+            {isiPaket.map((p, i) => (
+              <motion.div key={p.title} variants={fadeUp} custom={i}>
+                <div className="flex gap-4 rounded-xl border border-gray-200 bg-white p-5 hover:shadow-md transition-shadow">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                    <p.icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">{p.title}</h3>
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">{p.desc}</p>
+                  </div>
+                </div>
               </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Harga ──────────────────────────────────── */}
+      <section id="harga" className="py-16 md:py-20 bg-gray-50 border-y border-gray-100">
+        <div className="mx-auto max-w-lg px-5">
+          <div className="text-center mb-10">
+            <p className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Harga</p>
+            <h2 className="mt-2 text-2xl font-bold md:text-3xl">Investasi Sekali Bayar</h2>
+          </div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <Card className="rounded-2xl border-2 border-emerald-500 shadow-xl shadow-emerald-100/40 overflow-hidden">
+              <div className="bg-emerald-600 px-6 py-3 text-center">
+                <span className="text-sm font-semibold text-white">Template Website + Google Sheets Backend</span>
+              </div>
+              <CardContent className="pt-8 pb-6 text-center">
+                <div className="flex items-baseline justify-center gap-1">
+                  <span className="text-sm text-gray-400">Rp</span>
+                  <span className="text-5xl font-extrabold tracking-tight">199K</span>
+                </div>
+                <p className="mt-2 text-sm text-gray-400">Bayar sekali, pakai selamanya</p>
+
+                <div className="mt-6 space-y-2.5 text-left max-w-xs mx-auto">
+                  {[
+                    'Source code website (Next.js + Tailwind)',
+                    'Google Apps Script backend',
+                    'Panduan deploy PDF + video',
+                    'Support WhatsApp 6 bulan',
+                    'Update source code 6 bulan',
+                    'Bisa dipakai untuk 1 domain',
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-2 text-sm text-gray-600">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 space-y-3">
+                  <a href="#kontak">
+                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-full py-6 text-base font-semibold shadow-lg shadow-emerald-200 gap-2">
+                      Pesan Sekarang <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </a>
+                  <p className="text-xs text-gray-400">Pembayaran via transfer bank / e-wallet</p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Testimonial ────────────────────────────── */}
+      <section className="py-16 md:py-20">
+        <div className="mx-auto max-w-3xl px-5 text-center">
+          <p className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Testimoni</p>
+          <h2 className="mt-2 text-2xl font-bold md:text-3xl">Kata Mereka</h2>
+
+          <div className="mt-10 space-y-6">
+            {[
+              { name: 'Ahmad Rizki', role: 'Pemilik Toko Online', text: 'Saya nggak bisa coding sama sekali, tapi berhasil deploy website dalam 1 jam! Panduannya sangat jelas dan mudah diikuti.' },
+              { name: 'Siti Nurhaliza', role: 'Freelancer', text: 'Klien saya sangat puas dengan website yang saya buat pakai template ini. Google Sheets backend-nya bikin pekerjaan jadi gampang.' },
+            ].map((t) => (
+              <div key={t.name} className="rounded-xl border border-gray-200 bg-white p-6 text-left">
+                <div className="flex gap-0.5 mb-3">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Star key={s} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed italic">&ldquo;{t.text}&rdquo;</p>
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-bold">
+                    {t.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{t.name}</p>
+                    <p className="text-xs text-gray-400">{t.role}</p>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -519,28 +536,24 @@ export default function Home() {
       <section id="faq" className="py-16 md:py-20 bg-gray-50 border-y border-gray-100">
         <div className="mx-auto max-w-2xl px-5">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold md:text-3xl">FAQ</h2>
+            <h2 className="text-2xl font-bold md:text-3xl">Pertanyaan Umum</h2>
           </div>
           <Accordion type="single" collapsible className="space-y-3">
             {faqList.map((item, i) => (
               <AccordionItem key={i} value={`faq-${i}`} className="rounded-xl border border-gray-200 px-4 bg-white">
-                <AccordionTrigger className="text-sm font-medium py-4 hover:no-underline">
-                  {item.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm text-gray-500 leading-relaxed pb-4">
-                  {item.a}
-                </AccordionContent>
+                <AccordionTrigger className="text-sm font-medium py-4 hover:no-underline">{item.q}</AccordionTrigger>
+                <AccordionContent className="text-sm text-gray-500 leading-relaxed pb-4">{item.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
       </section>
 
-      {/* ─── CTA ────────────────────────────────────── */}
+      {/* ─── CTA / Pesan ────────────────────────────── */}
       <section id="kontak" className="py-16 md:py-24">
         <div className="mx-auto max-w-xl px-5 text-center">
-          <h2 className="text-2xl font-bold md:text-3xl">Siap Bikin Website Anda?</h2>
-          <p className="mt-3 text-gray-500">Isi form di bawah, kami akan menghubungi Anda dalam 24 jam.</p>
+          <h2 className="text-2xl font-bold md:text-3xl">Siap Punya Website Sendiri?</h2>
+          <p className="mt-3 text-gray-500">Isi form di bawah untuk memesan. Kami akan kirim source code + panduannya.</p>
 
           <Card className="mt-8 rounded-2xl border-gray-200 shadow-sm text-left">
             <CardContent className="pt-6 space-y-4">
@@ -556,11 +569,15 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="mt-4">
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700">Pesan</label>
-                  <Textarea name="deskripsi" placeholder="Ceritakan kebutuhan website Anda..." required rows={4} className="rounded-lg" />
+                  <label className="mb-1.5 block text-sm font-medium text-gray-700">No. WhatsApp</label>
+                  <Input name="wa" placeholder="08xxxxxxxxxx" required className="rounded-lg" />
+                </div>
+                <div className="mt-4">
+                  <label className="mb-1.5 block text-sm font-medium text-gray-700">Pesan (opsional)</label>
+                  <Textarea name="deskripsi" placeholder="Tulis pertanyaan atau kebutuhan Anda..." rows={3} className="rounded-lg" />
                 </div>
                 <Button type="submit" disabled={submitting} className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-full py-5 gap-2">
-                  {submitting ? 'Mengirim...' : <>Kirim Pesan <Send className="h-4 w-4" /></>}
+                  {submitting ? 'Mengirim...' : <>Pesan Sekarang <Send className="h-4 w-4" /></>}
                 </Button>
               </form>
             </CardContent>
@@ -583,7 +600,7 @@ export default function Home() {
               <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-600 text-white text-xs font-bold">AD</div>
               <span className="text-sm font-semibold">AkademiDigital</span>
             </div>
-            <p className="mt-1 text-xs text-gray-400">Website modern dengan Google Sheets backend.</p>
+            <p className="mt-1 text-xs text-gray-400">Template website + Google Sheets backend.</p>
           </div>
           <p className="text-xs text-gray-400">© {new Date().getFullYear()} AkademiDigital. All rights reserved.</p>
         </div>
