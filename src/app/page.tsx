@@ -292,8 +292,8 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-gray-200/60 bg-white/90 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-bold text-sm">AD</div>
-            <span className="text-lg font-bold tracking-tight">AkademiDigital</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-bold text-sm">PD</div>
+            <span className="text-lg font-bold tracking-tight">ProdukDigital</span>
           </div>
           <nav className="hidden items-center gap-1 md:flex">
             <a href="#produk" className="rounded-md px-3 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900">Produk</a>
@@ -312,8 +312,8 @@ export default function Home() {
               </SheetTrigger>
               <SheetContent side="right" className="w-72">
                 <SheetTitle className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-bold text-sm">AD</div>
-                  AkademiDigital
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white font-bold text-sm">PD</div>
+                  ProdukDigital
                 </SheetTitle>
                 <nav className="mt-8 flex flex-col gap-1">
                   {['#produk', '#harga', '#faq'].map((l) => (
@@ -652,12 +652,12 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-5 py-8 text-center md:flex-row md:justify-between md:text-left">
           <div>
             <div className="flex items-center justify-center gap-2 md:justify-start">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-emerald-500 to-teal-500 text-white text-xs font-bold">AD</div>
-              <span className="text-sm font-semibold">AkademiDigital</span>
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-emerald-500 to-teal-500 text-white text-xs font-bold">PD</div>
+              <span className="text-sm font-semibold">ProdukDigital</span>
             </div>
             <p className="mt-1 text-xs text-gray-400">Aplikasi web siap pakai + Google Sheets backend.</p>
           </div>
-          <p className="text-xs text-gray-400">&copy; {new Date().getFullYear()} AkademiDigital. All rights reserved.</p>
+          <p className="text-xs text-gray-400">&copy; {new Date().getFullYear()} ProdukDigital. All rights reserved.</p>
         </div>
       </footer>
 

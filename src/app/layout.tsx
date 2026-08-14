@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AkademiDigital — Aplikasi Web Siap Pakai + Google Sheets",
+  title: "ProdukDigital — Aplikasi Web Siap Pakai + Google Sheets",
   description:
     "Jual aplikasi web berbasis Google Apps Script: Aplikasi Zakat, Tabungan Sekolah, Sikurban & Kas Masjid. Source code lengkap + panduan deploy. Hosting gratis.",
   keywords: [
@@ -29,11 +29,11 @@ export const metadata: Metadata = {
   ],
   icons: { icon: "/logo.svg" },
   openGraph: {
-    title: "Aplikasi Web Siap Pakai + Google Sheets — AkademiDigital",
+    title: "Aplikasi Web Siap Pakai + Google Sheets — ProdukDigital",
     description:
       "4 aplikasi web berbasis GAS: Zakat, Tabungan Sekolah, Sikurban & Kas Masjid. Source code + panduan deploy. Bayar sekali, pakai selamanya.",
-    url: "https://akademidigital.vercel.app",
-    siteName: "AkademiDigital",
+    url: "https://produkdigital.vercel.app",
+    siteName: "ProdukDigital",
     type: "website",
   },
 };
