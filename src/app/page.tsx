@@ -220,8 +220,8 @@ function VideoCard({ product, onPlay }: { product: typeof products[0]; onPlay: (
 
           {/* Top price badge */}
           <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-lg bg-white/90 px-2.5 py-1 backdrop-blur-sm shadow-sm">
-            <span className="text-[10px] text-gray-400 line-through">Rp 100K</span>
-            <span className="text-xs font-bold text-gray-800">Rp {product.price}</span>
+            <span className="text-[10px] text-gray-400 line-through">Rp {product.price}</span>
+            <span className="text-xs font-bold text-emerald-600">Rp 100K</span>
           </div>
         </div>
 
@@ -444,7 +444,8 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl font-extrabold text-gray-900">Rp {activeProduct.price}</span>
+                    <span className="text-sm text-gray-400 line-through mr-2">Rp {activeProduct.price}</span>
+                    <span className="text-2xl font-extrabold text-emerald-600">Rp 100K</span>
                     <a href="#kontak" onClick={() => setActiveProduct(null)} className="flex-1 sm:flex-none">
                       <Button className={`rounded-full px-6 font-semibold bg-gradient-to-r ${activeProduct.gradient} text-white shadow-sm gap-2`}>
                         Pesan Sekarang <ArrowRight className="h-4 w-4" />
@@ -532,10 +533,13 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="mb-4 flex items-baseline gap-1">
-                      <span className="text-sm text-gray-400">Rp</span>
-                      <span className="text-3xl font-extrabold">{product.price}</span>
-                      <span className="text-sm text-gray-400">/lisensi</span>
+                    <div className="mb-4 flex flex-col gap-0.5">
+                      <span className="text-sm text-gray-400 line-through">Rp {product.price}</span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-sm text-gray-400">Rp</span>
+                        <span className="text-3xl font-extrabold text-emerald-600">100K</span>
+                        <span className="text-sm text-gray-400">/lisensi</span>
+                      </div>
                     </div>
 
                     <ul className="space-y-2 mb-5">
@@ -573,9 +577,9 @@ export default function Home() {
                     <span className="text-sm text-gray-400">Beli semua 4 aplikasi</span>
                   </div>
                   <div className="mt-2 flex items-baseline gap-2">
-                    <span className="text-sm text-gray-400 line-through">Rp 996K</span>
-                    <span className="text-3xl font-extrabold text-emerald-700">Rp 599K</span>
-                    <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600">Hemat 40%</span>
+                    <span className="text-sm text-gray-400 line-through">Rp 400K</span>
+                    <span className="text-3xl font-extrabold text-emerald-700">Rp 299K</span>
+                    <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600">Hemat 25%</span>
                   </div>
                 </div>
                 <a href="#kontak">
