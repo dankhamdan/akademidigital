@@ -509,7 +509,7 @@ export default function Home() {
         <div className="mx-auto max-w-5xl px-5">
           <div className="text-center mb-10">
             <p className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Daftar Harga</p>
-            <h2 className="mt-2 text-2xl font-bold md:text-3xl">Harga Transparan, Bayar Sekali</h2>
+            <h2 className="mt-2 text-2xl font-bold md:text-3xl">Harga Transparan, Bayar Sekali Untuk Selamanya</h2>
           </div>
 
           <motion.div
