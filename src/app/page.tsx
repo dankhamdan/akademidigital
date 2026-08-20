@@ -79,6 +79,7 @@ const products = [
       'Pencatatan penerimaan & penyaluran',
       'Laporan real-time di Google Sheets',
       'Cetak bukti pembayaran zakat',
+      'Notifikasi Otomatis pembayaran zakat via Whatsapp',
       'Dashboard statistik per bulan/tahun',
       'Multi-admin (takmir masjid)',
       'QR Code untuk pembayaran digital',
