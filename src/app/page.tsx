@@ -219,8 +219,9 @@ function VideoCard({ product, onPlay }: { product: typeof products[0]; onPlay: (
           </div>
 
           {/* Top price badge */}
-          <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2.5 py-1 text-xs font-bold text-gray-800 backdrop-blur-sm shadow-sm">
-            Rp {product.price}
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-lg bg-white/90 px-2.5 py-1 backdrop-blur-sm shadow-sm">
+            <span className="text-[10px] text-gray-400 line-through">Rp 100K</span>
+            <span className="text-xs font-bold text-gray-800">Rp {product.price}</span>
           </div>
         </div>
 
