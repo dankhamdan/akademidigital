@@ -646,7 +646,7 @@ export default function Home() {
 
           <p className="mt-4 text-sm text-gray-400">
             Atau langsung chat via{' '}
-            <a href="https://wa.me/62" className="text-emerald-600 font-medium hover:underline inline-flex items-center gap-1">
+            <a href="https://wa.me/6281572266150" className="text-emerald-600 font-medium hover:underline inline-flex items-center gap-1">
               WhatsApp <ExternalLink className="h-3 w-3" />
             </a>
           </p>
